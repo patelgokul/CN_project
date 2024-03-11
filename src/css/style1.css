@@ -1,0 +1,14 @@
+body{
+    background-color: #F0E68C;
+}
+
+.table1{
+    border: 1px solid black;
+    
+}
+
+td, th {
+    border: none; /* Remove default borders */
+    box-shadow: inset 0px 0px 0px 1px black;  /* Creates an inset black shadow for an inner border effect */
+    padding: 5px; /* Optional padding to separate content from the inner border */
+  }
