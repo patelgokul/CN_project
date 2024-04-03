@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/src/css/style1.css" />
+
+    <title>Binary Numbers</title>
+  </head>
+  <style>
+    body {
+      background-color: #f0e68c;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+  </style>
+  <body class="body">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/homepage.html">Distance Vector</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/page1.html"
+                >Shortest Distance</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/page2.html">Distance Vector</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/page3.html">Protocol</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/page4.html">Count to Infinity</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <br /><br />
+    <div class="content">
+      <img src="./src/img/graph.png" alt="" />
+      <h3>- Find the shortest distance between nodes in the above graph -</h3>
+      <br />
+      <table class="table1">
+        <thead>
+          <tr>
+            <th scope="col">Nodes</th>
+            <th scope="col">Distance</th>
+            <th scope="col">Nodes</th>
+            <th scope="col">Distance</th>
+            <th scope="col">Nodes</th>
+            <th scope="col">Distance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A - B</td>
+            <td>5</td>
+            <td>A - C</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input1"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+            <td>A - D</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input2"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>A - E</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input3"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+            <td>A - F</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input4"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+            <td>B - C</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>B - D</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input5"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+            <td>B - E</td>
+            <td>1</td>
+            <td>B - F</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>C - D</td>
+            <td>4</td>
+            <td>C - E</td>
+            <td>2</td>
+            <td>C - F</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input6"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>D - E</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input7"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+            <td>D - F</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input8"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+            <td>E - F</td>
+            <td>
+              <input
+                type="text"
+                id="p1_input9"
+                placeholder=""
+                autocomplete="off"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <button class="btn btn-warning mb-3" onclick="p1_validate()">
+        Submit
+      </button>
+    </div>
+  </body>
+
+  <script src="/src/js/main.js"></script>
+</html>
