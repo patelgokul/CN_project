@@ -1,138 +1,222 @@
 // alert("working");
 
-function p1_validate() {
-  let input1 = document.getElementById("p1_input1");
-  let input2 = document.getElementById("p1_input2");
-  let input3 = document.getElementById("p1_input3");
-  let input4 = document.getElementById("p1_input4");
-  let input5 = document.getElementById("p1_input5");
-  let input6 = document.getElementById("p1_input6");
-  let input7 = document.getElementById("p1_input7");
-  let input8 = document.getElementById("p1_input8");
-  let input9 = document.getElementById("p1_input9");
+const answers = [
+  [5, 2, 6],
+  [4, 6, 3],
+  [4, 1, 3],
+  [4, 2, 4],
+  [3, 1, 2]
+];
 
-  function check_input(inp, answer) {
-    if (inp.value.trim() === answer) {
-      inp.style.borderColor = "green";
-      inp.style.backgroundColor = "lightgreen";
-      return 1;
-    } else {
-      inp.style.borderColor = "red";
-      inp.style.backgroundColor = "lightcoral";
-      return 0;
+const paths = [
+  ["A-B", "A-C", "A-D"],
+  ["A-E", "A-F", "B-C"],
+  ["B-D", "B-E", "B-F"],
+  ["C-D", "C-E", "C-F"],
+  ["D-E", "D-F", "E-F"]
+];
+const values = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+function generateTable() {
+  const tableBody = document.getElementById('tableBody');
+  if(!tableBody)
+    return;
+  values.sort(() => Math.random() - 0.5);
+  for (let i = 0; i < 5; i++) {
+    const tableRow = document.createElement('tr');
+    for (let j = 0; j < 3; j++) {
+      const cell1 = document.createElement('td');
+      const span1 = document.createElement('span');
+      span1.textContent = paths[i][j];
+      cell1.appendChild(span1);
+      tableRow.appendChild(cell1);
+
+
+      const cellValue = values[i * 3 + j];
+      const cell = document.createElement('td');
+      const span = document.createElement('span');
+      const inp = document.createElement('input');
+      inp.id = `input_${i * 3 + j}`;
+
+
+      if (cellValue) {
+        // cell.classList.add('user-input');
+        span.textContent = answers[i][j];
+        cell.appendChild(span);
+
+      } else {
+        // span.textContent = 'Hello';
+        cell.appendChild(inp);
+      }
+      tableRow.appendChild(cell);
+    }
+    tableBody.appendChild(tableRow);
+  }
+}
+
+generateTable(); // Generate the table on page load
+
+function validateTable() {
+  var correct = true;
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (values[i * 3 + j])
+        continue;
+      const inp = document.getElementById(`input_${i * 3 + j}`);
+      if (inp.value.trim() == `${answers[i][j]}`) {
+        inp.style.borderColor = "green";
+        inp.style.backgroundColor = "lightgreen";
+      } else {
+        inp.style.borderColor = "red";
+        inp.style.backgroundColor = "lightcoral";
+        correct = false;
+      }
     }
   }
-
-  chk =
-    check_input(input1, "2") &
-    check_input(input2, "6") &
-    check_input(input3, "4") &
-    check_input(input4, "6") &
-    check_input(input5, "4") &
-    check_input(input6, "4") &
-    check_input(input7, "3") &
-    check_input(input8, "1") &
-    check_input(input9, "2");
-
   setTimeout(function () {
-    if (chk == 1) alert("Please proceed to next page");
+    if (correct) alert("Please proceed to next page");
   }, 300);
 }
 
-function p2_validate() {
-  let input1 = document.getElementById("p2_input1");
-  let input2 = document.getElementById("p2_input2");
-  let input3 = document.getElementById("p2_input3");
-  let input4 = document.getElementById("p2_input4");
-  let input5 = document.getElementById("p2_input5");
-  let input6 = document.getElementById("p2_input6");
-  let input7 = document.getElementById("p2_input7");
-  let input8 = document.getElementById("p2_input8");
-  let input9 = document.getElementById("p2_input9");
-  let input10 = document.getElementById("p2_input10");
-  let input11 = document.getElementById("p2_input11");
-  let input12 = document.getElementById("p2_input12");
-  let input13 = document.getElementById("p2_input13");
-  let input14 = document.getElementById("p2_input14");
-  let input15 = document.getElementById("p2_input15");
-  let input16 = document.getElementById("p2_input16");
-  let input17 = document.getElementById("p2_input17");
-  let input18 = document.getElementById("p2_input18");
-  let input19 = document.getElementById("p2_input19");
-  let input20 = document.getElementById("p2_input20");
-  let input21 = document.getElementById("p2_input21");
-  let input22 = document.getElementById("p2_input22");
-  let input23 = document.getElementById("p2_input23");
-  let input24 = document.getElementById("p2_input24");
-  let input25 = document.getElementById("p2_input25");
 
-  function check_input(inp, answer) {
-    if (inp.value.trim() === answer) {
-      inp.style.borderColor = "green";
-      inp.style.backgroundColor = "lightgreen";
-      return 1;
-    } else {
-      inp.style.borderColor = "red";
-      inp.style.backgroundColor = "lightcoral";
-      return 0;
-    }
+
+function p2_generateTable(currNode, values, nodes, answers) {
+  const tableBody = document.getElementById(`p2_${currNode}_tableBody`);
+  if(!tableBody)
+    return;
+  values.sort(() => Math.random() - 0.5);
+
+  // Clear existing table rows
+  // tableBody.innerHTML = '';
+
+  // Create table rows with data
+  const tableRow1 = document.createElement('tr');
+  const cell = document.createElement('th');
+  cell.textContent = "Node";
+  tableRow1.appendChild(cell);
+  for (let j = 0; j < 5; j++) {
+    const cell1 = document.createElement('td');
+    const span1 = document.createElement('span');
+    span1.textContent = nodes[j];
+    cell1.appendChild(span1);
+    tableRow1.appendChild(cell1);
   }
+  tableBody.appendChild(tableRow1);
+  const tableRow2 = document.createElement('tr');
+  const cell2 = document.createElement('th');
+  cell2.textContent = "Distance";
+  tableRow2.appendChild(cell2);
+  for (let j = 0; j < 5; j++) {
+    const cellValue = values[j];
+    const cell = document.createElement('td');
+    const span = document.createElement('span');
+    const inp = document.createElement('input');
+    inp.id = `input_${currNode}_${j}`;
 
-  chk =
-    check_input(input1, "5") &
-    check_input(input2, "3") &
-    check_input(input3, "4") &
-    check_input(input4, "1") &
-    check_input(input5, "3") &
-    check_input(input6, "2") &
-    check_input(input7, "3") &
-    check_input(input8, "4") &
-    check_input(input9, "2") &
-    check_input(input10, "4") &
-    check_input(input11, "6") &
-    check_input(input12, "4") &
-    check_input(input13, "4") &
-    check_input(input14, "2") &
-    check_input(input15, "4") &
-    check_input(input16, "4") &
-    check_input(input17, "1") &
-    check_input(input18, "2") &
-    check_input(input19, "3") &
-    check_input(input20, "2") &
-    check_input(input21, "6") &
-    check_input(input22, "3") &
-    check_input(input23, "4") &
-    check_input(input24, "1") &
-    check_input(input25, "2");
 
+    if (cellValue) {
+      // cell.classList.add('user-input');
+      span.textContent = answers[j];
+      cell.appendChild(span);
+
+    } else {
+      // span.textContent = 'Hello';
+      cell.appendChild(inp);
+    }
+    tableRow2.appendChild(cell);
+  }
+  tableBody.appendChild(tableRow2);
+}
+
+const valueB = [1,1,0,0,0];
+const valueC = [1,1,0,0,0];
+const answerA = [5,2,6,4,6];
+const answerB = [5,3,4,1,3];
+const answerC = [2,3,4,2,4];
+
+p2_generateTable('A', [1,1,1,1,1], ['B', 'C','D','E','F'], answerA); // Generate the table on page load
+p2_generateTable('B',valueB, ['A', 'C','D','E','F'], answerB); // Generate the table on page load
+p2_generateTable('C',valueC , ['A', 'B','D','E','F'], answerC); // Generate the table on page load
+
+
+function validate(currNode, values, answers){
+
+  var correct = true;
+    for (let j = 0; j < 5; j++) {
+      if (values[j])
+        continue;
+      const inp = document.getElementById(`input_${currNode}_${j}`);
+      if (inp.value.trim() == `${answers[j]}`) {
+        inp.style.borderColor = "green";
+        inp.style.backgroundColor = "lightgreen";
+      } else {
+        inp.style.borderColor = "red";
+        inp.style.backgroundColor = "lightcoral";
+        correct = false;
+      }
+    }
+  return correct;
+}
+function p2_validateTable() {
+  
+  const correct1 = validate('B', valueB, answerB);
+  const correct2 = validate('C', valueC, answerC);
+  const correct = correct1 && correct2;
   setTimeout(function () {
-    if (chk == 1) alert("Please proceed to next page");
+    if (correct) alert("Please proceed to next page");
   }, 300);
 }
 
 function p3_validate() {
   let input1 = document.getElementById("p3_input1");
   let input2 = document.getElementById("p3_input2");
+  let input3 = document.getElementById("p3_input3");
+  let input4 = document.getElementById("p3_input4");
+  let input5 = document.getElementById("p3_input5");
+  let input6 = document.getElementById("p3_input6");
 
-  if (
-    (input1.value.trim() == "00") & (input2.value.trim() == "11") ||
-    (input1.value.trim() == "11") & (input2.value.trim() == "00")
-  ) {
-    input1.style.borderColor = "green";
-    input1.style.backgroundColor = "lightgreen";
-    input2.style.borderColor = "green";
-    input2.style.backgroundColor = "lightgreen";
+  let tab2 = document.querySelector(".p3_tab-cont2").style.display;
+  let tab3 = document.querySelector(".p3_tab-cont3").style.display;
 
-    setTimeout(function () {
-      alert("Please proceed to next page");
-    }, 300);
+  function check_input(inp, answer) {
+    if (inp.value.trim() === answer) {
+      inp.style.borderColor = "green";
+      inp.style.backgroundColor = "lightgreen";
+      return 1;
+    } else {
+      inp.style.borderColor = "red";
+      inp.style.backgroundColor = "lightcoral";
+      return 0;
+    }
+  }
+
+  if (tab2 === "none") {
+    chk = check_input(input1, "4");
+    if (chk == 1) {
+      document.querySelector(".p3_tab-cont2").style.display = "block";
+    }
+  } else if (tab3 === "none") {
+    chk =
+      check_input(input1, "4") &
+      check_input(input2, "5") &
+      check_input(input3, "6");
+    if (chk == 1) {
+      document.querySelector(".p3_tab-cont3").style.display = "block";
+    }
   } else {
-    input1.style.borderColor = "red";
-    input1.style.backgroundColor = "lightcoral";
-    input2.style.borderColor = "red";
-    input2.style.backgroundColor = "lightcoral";
+    chk =
+      check_input(input1, "4") &
+      check_input(input2, "5") &
+      check_input(input3, "6") &
+      check_input(input4, "2") &
+      check_input(input5, "6") &
+      check_input(input6, "4");
+    setTimeout(function () {
+      if (chk == 1) alert("Great! Please proceed to next page");
+    }, 300);
   }
 }
+
 
 function p4_validate() {
   let input1 = document.getElementById("p4_input1");

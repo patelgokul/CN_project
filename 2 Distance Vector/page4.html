@@ -13,10 +13,18 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="src/css/style1.css" />
-    <title>Subnetting</title>
-    <style></style>
-  </head>
-
+    <title>Distance Vector</title></head
+  ><style>
+    body {
+      background-color: #f0e68c;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+  </style>
   <body class="body">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
@@ -46,74 +54,115 @@
               <a class="nav-link" href="/page3.html">Protocol</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/page4.html">Count to Infinity</a>
+              <a class="nav-link" href="/page4.html">Link Failure</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/page5.html">Count to Infinity</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
+    <br /><br />
+    <div class="content">
+      <img src="./src/img/graph.png" alt="" />
+      <h4>- Distance vector of node A -</h4>
+      <table class="table1">
+        <tbody>
+          <tr>
+            <th scope="row">Node</th>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <th scope="row">Distance</th>
+            <td>5</td>
+            <td>2</td>
+            <td>6</td>
+            <td>4</td>
+            <td>6</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <h4>- Distance vector of node B -</h4>
+      <table class="table1">
+        <tbody>
+          <tr>
+            <th scope="row">Node</th>
+            <td>A</td>
+            <td>C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <th scope="row">Distance</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <br />
+      <br />
 
-    <h1>What is Subnetting?</h1>
-    <h5>
-      Subnetting is a networking technique used to divide an IP network into
-      smaller, more manageable sub-networks called subnets. This process helps
-      in optimizing network performance, improving security, and simplifying
-      network management.
-    </h5>
-    <h4>Componets of Subnet:</h4>
-    <h5>1. IP Address</h5>
-    <h5>
-      2. Subnet Mask: A 32-bit binary value (represented in dotted decimal form)
-      that defines the network portion (subnet) and the host portion of an IP
-      address. It uses ones (1) to identify the network bits and zeros (0) to
-      identify the host bits.
-    </h5>
-    <h5>
-      3. Subnetting Process: The process of dividing a network into smaller
-      subnets involves applying the subnet mask to the IP address. This is done
-      using a bitwise AND operation between the IP address and the subnet mask.
-      The resulting value identifies the subnet address, which is shared by all
-      devices within the subnet. The remaining bits identify the specific host
-      within the subnet.
-    </h5>
-    <br />
-    <br />
-    <h6>
-      Consider a IP Address with 8-bits for Network ID and 24-bits for Host ID
-    </h6>
-    <br />
-    <div class="container">
-      <div class="img_container">
-        <image src="/src/img/subnet-4f.png" alt=""></image>
-        <h5 class="given-value-10">10</h5>
-        <input
-          type="text"
-          class="input-box1"
-          placeholder="Input 1"
-          autocomplete="off"
-          id="p3_input1"
-        />
-        <input
-          type="text"
-          class="input-box2"
-          placeholder="Input 2"
-          autocomplete="off"
-          id="p3_input2"
-        />
-        <h5 class="given-value-01">01</h5>
-      </div>
-
-      <!-- <div class="circle"></div> -->
+      <h2>Link between E and F breaks</h2>
+      <img src="./src/img/graph2.png" alt="" />
+      <h4>- Updated distance vector of node A -</h4>
+      <table class="table1">
+        <tbody>
+          <tr>
+            <th scope="row">Node</th>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <th scope="row">Distance</th>
+            <td>5</td>
+            <td>2</td>
+            <td>6</td>
+            <td>4</td>
+            <td>6</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <h4>- Updated distance vector of node B -</h4>
+      <table class="table1">
+        <tbody>
+          <tr>
+            <th scope="row">Node</th>
+            <td>A</td>
+            <td>C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <th scope="row">Distance</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <button class="btn btn-warning mb-3" onclick="p4_validate()">
+        Submit
+      </button>
     </div>
-    <br /><br />
-    <button class="btn btn-warning" onclick="p3_validate()">Submit</button>
-    <br /><br />
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
   </body>
 
   <script src="/src/js/main.js"></script>

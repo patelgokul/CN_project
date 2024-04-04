@@ -66,8 +66,58 @@
     <br /><br />
     <div class="content">
       <img src="./src/img/graph.png" alt="" />
-      <div class="p3_tab-cont1">
-        <h4>First update:</h4>
+      <h5>- Distance vector of node A -</h5>
+      <table class="table1">
+        <tbody>
+          <tr>
+            <th scope="row">Node</th>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <th scope="row">Distance</th>
+            <td>5</td>
+            <td>2</td>
+            <td>6</td>
+            <td>4</td>
+            <td>6</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <h5>- Distance vector of node E -</h5>
+      <table class="table1">
+        <tbody>
+          <tr>
+            <th scope="row">Node</th>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <th scope="row">Distance</th>
+            <td>3</td>
+            <td></td>
+            <td></td>
+            <td>2</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <br />
+      <br />
+
+      <h2>Link between B and E breaks</h2>
+      <img src="./src/img/graph3.png" alt="" />
+      <p>Distance vector of all nodes will be recomputed</p>
+      <div class="p5_tab-cont1">
+        <h4>Update 1:</h4>
         <h5>Distance vector (Node A)</h5>
         <table class="table1">
           <tbody>
@@ -90,7 +140,7 @@
           </tbody>
         </table>
         <br />
-        <h5>Recieved distance vector (Node C)</h5>
+        <h5>Recieved distance vector (Node E)</h5>
         <table class="table1">
           <tbody>
             <tr>
@@ -113,7 +163,7 @@
         </table>
         <br />
         <h5>Updated distance vector (Node A)</h5>
-        <p>Dist(A, x) = mini(Dist(A, x), {Dist(A, C)+Dist(C, x)})</p>
+        <p>Dist(A, x) = mini(Dist(A, x), {Dist(A, E)+Dist(E, x)})</p>
         <table class="table1">
           <tbody>
             <tr>
@@ -129,26 +179,18 @@
               <td>INF</td>
               <td>2</td>
               <td>6</td>
-              <td>
-                <input
-                  type="text"
-                  id="p3_input1"
-                  placeholder=""
-                  autocomplete="off"
-                />
-              </td>
+              <td></td>
               <td>INF</td>
             </tr>
           </tbody>
         </table>
         <br />
         <br />
-        <br />
       </div>
 
-      <div class="p3_tab-cont2" style="display: none">
-        <h4>Second update:</h4>
-        <h5>Distance vector (Node A)</h5>
+      <div class="p5_tab-cont2">
+        <h4>Update 2:</h4>
+        <h5>Distance vector (Node E)</h5>
         <table class="table1">
           <tbody>
             <tr>
@@ -170,7 +212,7 @@
           </tbody>
         </table>
         <br />
-        <h5>Recieved distance vector (Node E)</h5>
+        <h5>Recieved distance vector (Node A)</h5>
         <table class="table1">
           <tbody>
             <tr>
@@ -192,8 +234,8 @@
           </tbody>
         </table>
         <br />
-        <h5>Updated distance vector (Node A)</h5>
-        <p>Dist(A, x) = mini(Dist(A, x), {Dist(A, E)+Dist(E, x)})</p>
+        <h5>Updated distance vector (Node E)</h5>
+        <p>Dist(E, x) = mini(Dist(E, x), {Dist(E, A)+Dist(A, x)})</p>
         <table class="table1">
           <tbody>
             <tr>
@@ -206,35 +248,20 @@
             </tr>
             <tr>
               <th scope="row">Distance</th>
-              <td>
-                <input
-                  type="text"
-                  id="p3_input2"
-                  placeholder=""
-                  autocomplete="off"
-                />
-              </td>
+              <td></td>
               <td>2</td>
               <td>6</td>
               <td>4</td>
-              <td>
-                <input
-                  type="text"
-                  id="p3_input3"
-                  placeholder=""
-                  autocomplete="off"
-                />
-              </td>
+              <td></td>
             </tr>
           </tbody>
         </table>
         <br />
         <br />
-        <br />
       </div>
 
-      <div class="p3_tab-cont3" style="display: none">
-        <h4>Third update:</h4>
+      <div class="p5_tab-cont3">
+        <h4>Update 3:</h4>
         <h5>Distance vector (Node A)</h5>
         <table class="table1">
           <tbody>
@@ -248,11 +275,11 @@
             </tr>
             <tr>
               <th scope="row">Distance</th>
-              <td>5</td>
+              <td>INF</td>
               <td>2</td>
-              <td>6</td>
-              <td>4</td>
-              <td>6</td>
+              <td>INF</td>
+              <td>5</td>
+              <td>INF</td>
             </tr>
           </tbody>
         </table>
@@ -264,17 +291,17 @@
               <th scope="row">Node</th>
               <td>A</td>
               <td>B</td>
-              <td>C</td>
               <td>D</td>
+              <td>E</td>
               <td>F</td>
             </tr>
             <tr>
               <th scope="row">Distance</th>
+              <td>2</td>
+              <td>INF</td>
               <td>4</td>
-              <td>1</td>
               <td>2</td>
-              <td>3</td>
-              <td>2</td>
+              <td>INF</td>
             </tr>
           </tbody>
         </table>
@@ -293,41 +320,91 @@
             </tr>
             <tr>
               <th scope="row">Distance</th>
-              <td>5</td>
-              <td>
-                <input
-                  type="text"
-                  id="p3_input4"
-                  placeholder=""
-                  autocomplete="off"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  id="p3_input5"
-                  placeholder=""
-                  autocomplete="off"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  id="p3_input6"
-                  placeholder=""
-                  autocomplete="off"
-                />
-              </td>
+              <td>INF</td>
+              <td>2</td>
               <td>6</td>
+              <td></td>
+              <td>INF</td>
             </tr>
           </tbody>
         </table>
         <br />
         <br />
-        <br />
       </div>
 
-      <button class="btn btn-warning mb-3" onclick="p3_validate()">
+      <div class="p5_tab-cont4">
+        <h4>Update 4:</h4>
+        <h5>Distance vector (Node E)</h5>
+        <table class="table1">
+          <tbody>
+            <tr>
+              <th scope="row">Node</th>
+              <td>B</td>
+              <td>C</td>
+              <td>D</td>
+              <td>E</td>
+              <td>F</td>
+            </tr>
+            <tr>
+              <th scope="row">Distance</th>
+              <td>INF</td>
+              <td>2</td>
+              <td>6</td>
+              <td>4</td>
+              <td>INF</td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <h5>Recieved distance vector (Node A)</h5>
+        <table class="table1">
+          <tbody>
+            <tr>
+              <th scope="row">Node</th>
+              <td>A</td>
+              <td>B</td>
+              <td>C</td>
+              <td>D</td>
+              <td>F</td>
+            </tr>
+            <tr>
+              <th scope="row">Distance</th>
+              <td>5</td>
+              <td>1</td>
+              <td>2</td>
+              <td>INF</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <h5>Updated distance vector (Node E)</h5>
+        <p>Dist(E, x) = mini(Dist(E, x), {Dist(E, A)+Dist(A, x)})</p>
+        <table class="table1">
+          <tbody>
+            <tr>
+              <th scope="row">Node</th>
+              <td>B</td>
+              <td>C</td>
+              <td>D</td>
+              <td>E</td>
+              <td>F</td>
+            </tr>
+            <tr>
+              <th scope="row">Distance</th>
+              <td></td>
+              <td>2</td>
+              <td>6</td>
+              <td>4</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <br />
+      </div>
+      <br />
+      <button class="btn btn-warning mb-3" onclick="p5_validate()">
         Submit
       </button>
     </div>
