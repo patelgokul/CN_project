@@ -17,7 +17,7 @@ const paths = [
 ];
 const values = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
-function generateTable() {
+function p1_generateTable() {
   const tableBody = document.getElementById('tableBody');
   if(!tableBody)
     return;
@@ -54,7 +54,7 @@ function generateTable() {
   }
 }
 
-generateTable(); // Generate the table on page load
+p1_generateTable(); // Generate the table on page load
 
 function validateTable() {
   var correct = true;
@@ -80,8 +80,8 @@ function validateTable() {
 
 
 
-function p2_generateTable(currNode, values, nodes, answers) {
-  const tableBody = document.getElementById(`p2_${currNode}_tableBody`);
+function generateTable(pageNo, currNode, values, nodes, answers) {
+  const tableBody = document.getElementById(`${pageNo}_${currNode}_tableBody`);
   if(!tableBody)
     return;
   values.sort(() => Math.random() - 0.5);
@@ -111,8 +111,9 @@ function p2_generateTable(currNode, values, nodes, answers) {
     const cell = document.createElement('td');
     const span = document.createElement('span');
     const inp = document.createElement('input');
-    inp.id = `input_${currNode}_${j}`;
-
+    inp.id = `input_${pageNo}_${currNode}_${j}`;
+    inp.autocomplete="off";
+    inp.type = "text";
 
     if (cellValue) {
       // cell.classList.add('user-input');
@@ -128,24 +129,33 @@ function p2_generateTable(currNode, values, nodes, answers) {
   tableBody.appendChild(tableRow2);
 }
 
+const valueA = [1,1,1,0,0];
 const valueB = [1,1,0,0,0];
 const valueC = [1,1,0,0,0];
 const answerA = [5,2,6,4,6];
 const answerB = [5,3,4,1,3];
 const answerC = [2,3,4,2,4];
+const newValueA = [1,1,1,0,0];
+const newValueB = [1,1,0,0,0];
+const newAnswerA = [5,2,6,4,7];
+const newAnswerB = [5,3,7,1,8];
+generateTable('p2', 'A', [1,1,1,1,1], ['B', 'C','D','E','F'], answerA); // Generate the table on page load
+generateTable('p2', 'B',valueB, ['A', 'C','D','E','F'], answerB); // Generate the table on page load
+generateTable('p2', 'C',valueC , ['A', 'B','D','E','F'], answerC); // Generate the table on page load
 
-p2_generateTable('A', [1,1,1,1,1], ['B', 'C','D','E','F'], answerA); // Generate the table on page load
-p2_generateTable('B',valueB, ['A', 'C','D','E','F'], answerB); // Generate the table on page load
-p2_generateTable('C',valueC , ['A', 'B','D','E','F'], answerC); // Generate the table on page load
+generateTable('p4_1', 'A', valueA, ['B', 'C','D','E','F'], answerA); // Generate the table on page load
+generateTable('p4_1', 'B',valueB, ['A', 'C','D','E','F'], answerB); // Generate the table on page load
 
+generateTable('p4_2', 'A', newValueA, ['B', 'C','D','E','F'], newAnswerA); // Generate the table on page load
+generateTable('p4_2', 'B',newValueB, ['A', 'C','D','E','F'], newAnswerB); // Generate the table on page load
 
-function validate(currNode, values, answers){
+function validate(pageNo, currNode, values, answers){
 
   var correct = true;
     for (let j = 0; j < 5; j++) {
       if (values[j])
         continue;
-      const inp = document.getElementById(`input_${currNode}_${j}`);
+      const inp = document.getElementById(`input_${pageNo}_${currNode}_${j}`);
       if (inp.value.trim() == `${answers[j]}`) {
         inp.style.borderColor = "green";
         inp.style.backgroundColor = "lightgreen";
@@ -159,14 +169,33 @@ function validate(currNode, values, answers){
 }
 function p2_validateTable() {
   
-  const correct1 = validate('B', valueB, answerB);
-  const correct2 = validate('C', valueC, answerC);
+  const correct1 = validate('p2','B', valueB, answerB);
+  const correct2 = validate('p2','C', valueC, answerC);
   const correct = correct1 && correct2;
   setTimeout(function () {
     if (correct) alert("Please proceed to next page");
   }, 300);
 }
 
+function p4_validateTable1() {
+  let tab2 = document.getElementById("p4_part2").style.display;
+  const correct1 = validate('p4_1','A', valueA, answerA);
+  const correct2 = validate('p4_1','B', valueB, answerB);
+  const correct = correct1 && correct2;
+  if(tab2==="none"){
+    if(correct){
+      document.getElementById("p4_part2").style.display = "block";
+    }
+    return;
+  } 
+  
+  const correct3 = validate('p4_2','A', newValueA, newAnswerA);
+  const correct4 = validate('p4_2','B', newValueB, newAnswerB);
+  const correct5 = correct1 && correct2 && correct3 && correct4;
+  setTimeout(function () {
+    if (correct5) alert("Great! Please proceed to next page");
+  }, 600);
+}
 function p3_validate() {
   let input1 = document.getElementById("p3_input1");
   let input2 = document.getElementById("p3_input2");

@@ -68,98 +68,40 @@
       <img src="./src/img/graph.png" alt="" />
       <h4>- Distance vector of node A -</h4>
       <table class="table1">
-        <tbody>
-          <tr>
-            <th scope="row">Node</th>
-            <td>B</td>
-            <td>C</td>
-            <td>D</td>
-            <td>E</td>
-            <td>F</td>
-          </tr>
-          <tr>
-            <th scope="row">Distance</th>
-            <td>5</td>
-            <td>2</td>
-            <td>6</td>
-            <td>4</td>
-            <td>6</td>
-          </tr>
+        <tbody id="p4_1_A_tableBody">
+          
         </tbody>
       </table>
       <br />
       <h4>- Distance vector of node B -</h4>
       <table class="table1">
-        <tbody>
-          <tr>
-            <th scope="row">Node</th>
-            <td>A</td>
-            <td>C</td>
-            <td>D</td>
-            <td>E</td>
-            <td>F</td>
-          </tr>
-          <tr>
-            <th scope="row">Distance</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
+        <tbody id="p4_1_B_tableBody">
+          
+          </tbody>
       </table>
       <br />
       <br />
       <br />
-
+      
+      <div id="p4_part2" style="display: none;">
       <h2>Link between E and F breaks</h2>
       <img src="./src/img/graph2.png" alt="" />
       <h4>- Updated distance vector of node A -</h4>
       <table class="table1">
-        <tbody>
-          <tr>
-            <th scope="row">Node</th>
-            <td>B</td>
-            <td>C</td>
-            <td>D</td>
-            <td>E</td>
-            <td>F</td>
-          </tr>
-          <tr>
-            <th scope="row">Distance</th>
-            <td>5</td>
-            <td>2</td>
-            <td>6</td>
-            <td>4</td>
-            <td>6</td>
-          </tr>
+        <tbody id="p4_2_A_tableBody">
+          
         </tbody>
       </table>
       <br />
       <h4>- Updated distance vector of node B -</h4>
       <table class="table1">
-        <tbody>
-          <tr>
-            <th scope="row">Node</th>
-            <td>A</td>
-            <td>C</td>
-            <td>D</td>
-            <td>E</td>
-            <td>F</td>
-          </tr>
-          <tr>
-            <th scope="row">Distance</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+        <tbody id="p4_2_B_tableBody">
+          
         </tbody>
       </table>
+    </div>
       <br />
-      <button class="btn btn-warning mb-3" onclick="p4_validate()">
+      <button class="btn btn-warning mb-3" onclick="p4_validateTable1()">
         Submit
       </button>
     </div>
