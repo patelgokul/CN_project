@@ -1,0 +1,43 @@
+body {
+  background-color: #f0e68c;
+}
+
+.table1 {
+  border: 1px solid black;
+}
+
+td,
+th {
+  border: none;
+  /* Remove default borders */
+  box-shadow: inset 0px 0px 0px 1px black;
+  /* Creates an inset black shadow for an inner border effect */
+  padding: 5px;
+  /* Optional padding to separate content from the inner border */
+  width: 100px;
+}
+
+input {
+  width: 90px;
+}
+
+
+.p2_input, .p3_input{
+  width: 35px;
+}
+.container {
+  position: relative;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+}
+
+@media screen and (max-width: 768px) {
+
+  /* Adjust styles for smaller screens */
+  .container {
+    position: relative;
+    width: auto;
+    height: auto;
+    text-align: center;
+  }
+}
