@@ -23,14 +23,15 @@ function animateRay(startX, startY, angle, length, ack = 0) {
   // Create a canvas element
   var canvas = document.createElement("canvas");
   var div = document.getElementById("canvas");
-  
-  canvas.style.borderLeft='2px';
-  canvas.style.borderRight='2px';
-  canvas.style.borderTop='0px';
-  canvas.style.borderBottom='0px';
-  canvas.style.borderStyle='solid';
-  canvas.style.borderTopColor='black';
-  canvas.style.borderBottomColor='black';
+  // var span = document.createElement("span");
+  div.style.width=`${canvas.width + 3}px`;
+  div.style.borderLeft='2px';
+  div.style.borderRight='2px';
+  div.style.borderTop='0px';
+  div.style.borderBottom='0px';
+  div.style.borderStyle='solid';
+  div.style.borderTopColor='black';
+  div.style.borderBottomColor='black';
 
   canvas.width = graphWidth;
   canvas.height = Math.abs(length * sinAngle) + 10;
