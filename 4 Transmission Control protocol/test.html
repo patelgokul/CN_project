@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/src/css/style1.css" />
+
+    <title>Link State</title>
+  </head>
+  <style>
+    body {
+      background-color: #f0e68c;
+      padding: 10 px;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+  </style>
+  <body class="body">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/homepage.html">TCP</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/page1.html">Stop and Wait</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/page2.html">_</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/page3.html">_</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/page4.html">_</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/test.html">TEST</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <br>
+    <button class="btn btn-warning mb-3" onclick="btnPress(1)">
+    --->
+    </button>
+    <button class="btn btn-warning mb-3" onclick="btnPress(0)">
+      <---
+    </button>
+    <button class="btn btn-warning mb-3" onclick="btnPress(3)">
+      X<---
+    </button>
+    <button class="btn btn-warning mb-3" onclick="btnPress(2)">
+      --->X
+    </button>
+    
+    <div id="canvas">
+
+    </div>
+    
+    </div>
+  </body>
+
+  <script src="/src/js/main.js"></script>
+</html>

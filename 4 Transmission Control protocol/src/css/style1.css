@@ -1,0 +1,80 @@
+body {
+    background-color: #f0e68c;
+  }
+  
+  .table1 {
+    border: 1px solid black;
+  }
+  
+  td,
+  th {
+    border: none;
+    /* Remove default borders */
+    box-shadow: inset 0px 0px 0px 1px black;
+    /* Creates an inset black shadow for an inner border effect */
+    padding: 5px;
+    /* Optional padding to separate content from the inner border */
+    width: 100px;
+  }
+  
+  input {
+    width: 90px;
+  }
+  
+  
+  .p2_input, .p3_input{
+    width: 35px;
+  }
+  .container {
+    position: relative;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+  }
+
+  .btn3d {
+	position: relative;
+	top: -6px;
+	border: 0;
+	transition: all 40ms linear;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.btn3d:active,
+.btn3d.active {
+	top: 2px;
+}
+
+.btn3d.btn-blue {
+	box-shadow: 0 0 0 1px #00a5c3 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #348FD2, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #39B3D7;
+}
+
+.btn3d.btn-blue:active,
+.btn3d.btn-blue.active {
+	box-shadow: 0 0 0 1px #00a5c3 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #39B3D7;
+}
+
+.btn3d.btn-green {
+	box-shadow: 0 0 0 1px #71ff62 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #39d746, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #4fff6f;
+}
+
+.btn3d.btn-green:active,
+.btn3d.btn-green.active {
+	box-shadow: 0 0 0 1px #71ff62 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #4fff6f;
+}
+
+.status-box {
+    width: 80px; 
+    height: 50px;
+    background-color: #f7f7f7; 
+    border: 5px solid rgb(77, 73, 73); 
+    margin-left: 20px;
+    box-shadow: 4px 3px 4px #00000058;
+    border-radius: 5px;
+}
