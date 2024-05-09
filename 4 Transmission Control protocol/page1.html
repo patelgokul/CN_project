@@ -26,7 +26,7 @@
       display: flex;
       /* flex-direction: column; */
       text-align: center;
-      align-items: center;
+      /* align-items: center; */
     }
   </style>
   <body class="body">
@@ -72,24 +72,17 @@
     </nav>
     <br /><br />
     <div class="content" >
-        <span style="width: 30%;">
-            <button type="button" class="btn btn-blue btn3d">Re-Send</button>
-            <button type="button" class="btn btn-green btn3d">Send Next</button>
+        <span style="width: 60%;">
+            <button type="button" class="btn btn-blue btn3d" onclick="sendPacket()">Re-Send</button>
+            <button type="button" class="btn btn-green btn3d" onclick="sendPacket()">Send Next</button>
         </span>
-        <span id="graph">
-            
-        </span>
-
-      
+        <span id="canvas"></span>
+        <div id="status-box" style="background-color: white; width: 500px;">
+          <h5>Communication log: </h5>
+          <ul id="log"></ul>
+        </div>
     </div>
     <br><br>
-    <div class="content" >
-        <span style="padding: 10px;">
-            <h5>ACK status received by sender</h5>
-        </span>
-
-        <span class="status-box"></span>
-    </div>
   </body>
 
   <script src="/src/js/main.js"></script>
