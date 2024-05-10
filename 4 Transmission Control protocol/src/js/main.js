@@ -1,7 +1,10 @@
 const graphWidth = 300;
 
 let sending = 0;
+let receiving = 0;
 let countACK = 0;
+let success = 1;
+let returnSuccess = 1;
 
 function animateRay(startX, startY, angle, length, ack = 0) {
   /*
@@ -25,7 +28,6 @@ function animateRay(startX, startY, angle, length, ack = 0) {
   // Create a canvas element
   var canvas = document.createElement("canvas");
   var div = document.getElementById("canvas");
-  // var span = document.createElement("span");
   div.style.width = `${canvas.width + 3}px`;
   div.style.borderLeft = "2px";
   div.style.borderRight = "2px";
@@ -72,14 +74,6 @@ function animateRay(startX, startY, angle, length, ack = 0) {
     if (ack) ctx.setLineDash([10, 5]);
     ctx.stroke();
 
-    // ctx.beginPath();
-    // ctx.moveTo(1, 0);
-    // ctx.lineTo(1, canvas.height);
-    // ctx.moveTo(canvas.width-1, 0);
-    // ctx.lineTo(canvas.width-1, canvas.height);
-    // ctx.setLineDash([]);
-    // ctx.stroke();
-
     // Draw the pointing head
     var directionFlag = 1;
     if (length < 0) directionFlag = -1;
@@ -117,76 +111,87 @@ function animateRay(startX, startY, angle, length, ack = 0) {
 }
 
 // Example usage:
-function btnPress(type) {
+async function callAnimateRay(dir, success) {
   var length = 300;
-  // type = 1 -> left
-  // type = 0 -> right
-  if (type == 1) animateRay(1, 1, -5, length);
-  else if (type == 0) animateRay(length, 1, 5, -length, 1);
-  else if (type == 2) {
-    animateRay(1, 1, -5, length / 2);
-  } else if (type == 3) {
-    animateRay(length, 1, 5, -length / 2, 1);
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
+  if(dir ){
+    if(success)
+      animateRay(1, 1, -5, length);
+    else
+      animateRay(1, 1, -5, length/2);
+  }
+  else{
+    if(success)
+      animateRay(length, 1, 5, -length, 1);
+    else  
+    animateRay(length, 1, 5, -length/2, 1);
+  }
+  return await delay(900+success*800);
 }
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+
+
+function getRandom(){
+  return Math.random() < 0.8;
+}
+
+function logEntry(msg){
+  let li = document.createElement("li");
+  let text = document.createTextNode(msg);
+  li.appendChild(text);
+  let ul = document.getElementById("log");
+  ul.appendChild(li);
 }
 
 async function sendPacket() {
   if (countACK >= 2) return;
-  var randomNumber = Math.floor(Math.random() * 3);
-  if (randomNumber == 0) randomNumber = 1;
-  sending += 1;
-  if(sending > 1){
-    let li = document.createElement("li");
-    let text = document.createTextNode("Packet is still in transit");
-    li.appendChild(text);
-    let ul = document.getElementById("log");
-    ul.appendChild(li);
-    sending -= 1;
+  if(sending || receiving){
+    logEntry("Packet is still in transit");
     return;
   }
-  btnPress(randomNumber);
-  await delay(1700);
-  sending -= 1;
-  if (randomNumber == 2) {
-    let li = document.createElement("li");
-    let text = document.createTextNode("Client's packet did not reach server");
-    li.appendChild(text);
-    let ul = document.getElementById("log");
-    ul.appendChild(li);
+  success = getRandom();
+  sending = 1;
+  await callAnimateRay(1,success);
+  sending = 0;
+  if (!success) {
+    logEntry("Client's packet did not reach server");
     return;
   }
-  else if (randomNumber == 1) {
-    let li = document.createElement("li");
-    let text = document.createTextNode("Client's packet reached server");
-    li.appendChild(text);
-    let ul = document.getElementById("log");
-    ul.appendChild(li);
+  else {
+    logEntry("Client's packet reached server");
   }
-  randomNumber = Math.floor(Math.random() * 4);
-  if (randomNumber == 1 || randomNumber == 2) randomNumber = 0;
-  btnPress(randomNumber);
-  await delay(1700);
-  if (randomNumber == 3) {
-    let li = document.createElement("li");
-    let text = document.createTextNode("Server's packet did not reach client");
-    li.appendChild(text);
-    let ul = document.getElementById("log");
-    ul.appendChild(li);
+  returnSuccess = getRandom();
+  receiving = 1;
+  await callAnimateRay(0, returnSuccess);
+  receiving = 0;
+  if (!returnSuccess) {
+    logEntry("Server's packet did not reach client");
     return;
   }
-  else if (randomNumber == 0) {
-    let li = document.createElement("li");
-    let text = document.createTextNode("Server's packet reached client");
-    li.appendChild(text);
-    let ul = document.getElementById("log");
-    ul.appendChild(li);
+  else {
+    logEntry("Server's packet reached client");
     countACK++;
   }
   if (countACK == 2) {
     alert("Great work! Please proceed to the next page")
+  }
+}
+
+async function buttonPress(type){
+  if(countACK == 0 && success && returnSuccess)
+    await sendPacket();
+  else if(type){
+    if(success && returnSuccess)
+      await sendPacket();
+    else
+      logEntry(`ACK${countACK+1} not received, cannot send next`);
+  }
+  else{
+    if(success && returnSuccess)
+      logEntry(`ACK${countACK} already received`);
+    else
+      await sendPacket();
   }
 }
