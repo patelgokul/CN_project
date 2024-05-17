@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/src/css/style1.css" />
+
+    <title>Stop and Wait</title>
+  </head>
+
+  <body class="body">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/homepage.html">TCP</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link"  href="/page1.html">Stop and Wait</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/page2.html">GBN-Sender</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/page3.html">_</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/page4.html">_</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/test.html">TEST</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <br /><br />
+    <div class="content" >
+      <!-- <div style="align-items: center; align-content: center; text-align: center;">
+        <br>
+        <table align="center" style="font-size: larger;" class="window-table">
+          <tbody>
+                        <tr >
+                            <td id="tab_1">1</td>
+                            <td id="tab_2">2</td>
+                            <td id="tab_3">3</td>
+                            <td id="tab_4">4</td>
+                            <td id="tab_5">5</td>
+                            <td id="tab_6">6</td>
+                            <td id="tab_7">7</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div> -->
+        <span style="flex-direction: column; justify-content:center; width: 20%;">
+
+          <div>
+            <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p2_buttonPress(0)">Move window</button>
+          </div>
+            <br>
+            <div>
+              <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 130px;" onclick="p2_buttonPress(1)">Send Next</button>
+            </div>
+            <br>
+            <div style="flex-direction: row;">
+              <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p2_buttonPress(2)">Re-Send</button>
+              <input type="number" id="resend_pkt" min="1" max="7" value="1" style=" width: 50px;">
+          </div>
+        </span>
+        
+        <span id="ray-name" style="display: flex; flex-direction: column;">
+
+        </span>
+
+        <span id="canvas" class="canvas-div" style="flex-direction: row;">
+          <!-- <span style="float: left;">
+            <p style=" width: 20px;">abc</p>
+            <canvas width="350" height="25"></canvas>
+            <span style="flex-direction: row; float: left;">
+              <p style="width: 50px; float: left;">abc</p>
+             </span> -->
+            <!-- <span style="flex-direction: row; float: left;"> -->
+              <!-- <canvas width="350" height="25" id="return0" style="float: right; border-width: 0px 2px; border-style: solid; border-color: initial"></canvas> -->
+
+            </span>
+          </span>
+        </span>
+        <div id="status-box" style="background-color: white; width: 40%;">
+            <h5>Communication log: </h5>
+            <ul id="log"></ul>
+        </div>
+        
+    </div>
+    <br><br>
+  </body>
+
+  <script src="/src/js/main.js"></script>
+</html>

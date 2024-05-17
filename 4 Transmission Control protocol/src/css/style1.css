@@ -1,30 +1,25 @@
 body {
-    background-color: #f0e68c;
-  }
-  
+  background-color: #f0e68c;
+  padding: 10 px;
+}
+
+.content {
+  display: flex;
+  /* flex-direction: column; */
+  text-align: center;
+  /* align-items: center; */
+}
+
+
+
   .table1 {
     border: 1px solid black;
-  }
-  
-  td,
-  th {
-    border: none;
-    /* Remove default borders */
-    box-shadow: inset 0px 0px 0px 1px black;
-    /* Creates an inset black shadow for an inner border effect */
-    padding: 5px;
-    /* Optional padding to separate content from the inner border */
-    width: 100px;
   }
   
   input {
     width: 90px;
   }
   
-  
-  .p2_input, .p3_input{
-    width: 35px;
-  }
   .container {
     position: relative;
     width: -webkit-fill-available;
@@ -69,6 +64,17 @@ body {
 	background-color: #4fff6f;
 }
 
+.btn3d.btn-grey {
+	box-shadow: 0 0 0 1px #d3fafa inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #a1d1d3, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #d3fafa;
+}
+
+.btn3d.btn-grey:active,
+.btn3d.btn-grey.active {
+	box-shadow: 0 0 0 1px #d3fafa inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #d3fafa;
+}
+
 .status-box {
     width: 80px; 
     height: 50px;
@@ -78,3 +84,32 @@ body {
     box-shadow: 4px 3px 4px #00000058;
     border-radius: 5px;
 }
+
+.window{
+  text-align: center;
+  break-inside: auto;
+}
+
+.window-table{
+  border: none;
+  /* Remove default borders */
+  box-shadow: inset 0px 0px 0px 1px black;
+  /* Creates an inset black shadow for an inner border effect */
+  padding: 5px;
+  /* Optional padding to separate content from the inner border */
+  width: 100px;
+}
+/* 
+.canvas-ele{
+  width: 300px;
+  height: 25px;
+}
+
+.canvas-div{
+  width: 303px;
+  border-left: 2px;
+  border-right: 2px;
+  border-top: 0;
+  border-bottom: 0;
+  border-style: ;
+} */
