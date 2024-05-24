@@ -15,21 +15,21 @@ body {
 
 
 
-  .table1 {
-    border: 1px solid black;
-  }
-  
-  input {
-    width: 90px;
-  }
-  
-  .container {
-    position: relative;
-    width: -webkit-fill-available;
-    height: -webkit-fill-available;
-  }
+.table1 {
+  border: 1px solid black;
+}
 
-  .btn3d {
+input {
+  width: 90px;
+}
+
+.container {
+  position: relative;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+}
+
+.btn3d {
 	position: relative;
 	top: -6px;
 	border: 0;

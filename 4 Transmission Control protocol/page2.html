@@ -92,7 +92,7 @@
               <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 50px;">
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 400px;">
+        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 410px;">
 
           <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
   
@@ -103,15 +103,16 @@
             </div>
         </div>
         <div id="status-box" style="flex: 1; left: 50%;">
-          <!-- <div id="timer" style="height: 30px; font-size: 25px; margin-bottom: 5px; font-family: 'Source Code Pro';">
+          <div id="timer" style="width: 450px; height: 30px; font-size: 25px; margin-bottom: 5px; font-family: 'Source Code Pro'; text-align: center;">
+            Time out in: 
+            --
+          </div>
 
-          </div> -->
-
-          <div id="Log-span" style=" width: 450px; overflow-y: scroll; height:400px; background-color: rgb(160, 212, 255) !important;">
-            <h5>Communication log: </h5>
-            <span >
+          <div id="Log-span" style=" width: 450px; ">
+            <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 10px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
+            <div style="overflow-y: scroll; height:350px; background-color: rgb(160, 212, 255) !important;">
               <ol id="log"></ol>
-            </span>
+            </div>
           </div>
         </div>
         

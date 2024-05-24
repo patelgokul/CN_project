@@ -20,7 +20,12 @@ var end = start + windowSize - 1;
 var ack_reached = 0;
 
 var timer_call = 0;
-var time_out = 0;
+/** 1 on timeout */
+var force_resend = false;
+const time_out_duration = 10;
+var duration = time_out_duration;
+var intervalID;
+
 
 var p3_count = 0;
 
@@ -424,7 +429,6 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
   {
   // if(success&&returnSuccess)
   //   timer_call ++;
-  var duration = 20;
   // const countdownDiv = document.getElementById("timer");
 
   // if(last_ack_sent == last_pkt_sent && returnSuccess && success){
@@ -433,25 +437,25 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
   // }
   // else
     {
-      const countdown = setInterval(() => {
-      const minutes = Math.floor(duration / 60);
-      const seconds = duration % 60;
+      // const countdown = setInterval(() => {
+      // const minutes = Math.floor(duration / 60);
+      // const seconds = duration % 60;
     
-      // countdownDiv.style.color = "black";
-      // countdownDiv.style.opacity = 1;
-      // countdownDiv.innerText = `pkt${last_ack_received + 1} - ${minutes}:${seconds.toString().padStart(2, "0")}`;
+      // // countdownDiv.style.color = "black";
+      // // countdownDiv.style.opacity = 1;
+      // // countdownDiv.innerText = `pkt${last_ack_received + 1} - ${minutes}:${seconds.toString().padStart(2, "0")}`;
     
-      duration--;
+      // duration--;
     
-      if (duration < 0 || timer_call > last_pkt_sent) {
-        time_out = 1;
-        console.log(duration,timer_call,last_pkt_sent);
-        clearInterval(countdown); // Stop the countdown
-        // countdownDiv.style.color = "red";
-        // countdownDiv.textContent = `Countdown finished for pkt${last_ack_received + 1}`;
-        // setInterval(() => {countdownDiv.style.opacity = (countdownDiv.style.opacity == 0.3) ? 1 : 0.3;},500);
-              }
-        }, 1000);
+      // if (duration < 0 || timer_call > last_pkt_sent) {
+      //   time_out = 1;
+      //   console.log(duration,timer_call,last_pkt_sent);
+      //   clearInterval(countdown); // Stop the countdown
+      //   // countdownDiv.style.color = "red";
+      //   // countdownDiv.textContent = `Countdown finished for pkt${last_ack_received + 1}`;
+      //   // setInterval(() => {countdownDiv.style.opacity = (countdownDiv.style.opacity == 0.3) ? 1 : 0.3;},500);
+      //         }
+      //   }, 1000);
 
     }
   
@@ -459,7 +463,7 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
 
   if(resend_pkt_no){
     // success - resent pkt number
-    time_out = 0;
+    // time_out = 0;
     logEntry(`Sender: Pkt${resend_pkt_no} sent and received by receiver`);
     delay(2000);
     logEntry(`Receiver: ACK${resend_pkt_no} sent and received by sender`);
@@ -615,6 +619,9 @@ async function p1_sendPacket() {
 
 
 async function p2_buttonPress(type) {
+
+  /* MOVE WINDOW */
+
   if (!type) {
     if (end <= p2_maxPkt && last_ack_received >= start) {
       start++;
@@ -631,33 +638,64 @@ async function p2_buttonPress(type) {
       logEntry("!!! Invalid move window !!!");
       // alert("!!! Invalid move window !!!");
     }
-  } else if (type == 1) {
+  } 
+  
+  /* SEND NEW */
+  
+  else if (type == 1) {
     if (
-      (!ack_reached || last_ack_received < start) &&
-      last_pkt_sent + 1 <= end
+      (!ack_reached || (last_ack_received < start || start == p2_maxPkt - windowSize + 1)) &&
+      last_pkt_sent + 1 <= end &&
+      !force_resend
     ) {
       // logEntry(`lps: ${last_pkt_sent}, chk ${last_pkt_sent <= end}`);
       // p2_timer(last_pkt_sent+1);
       success = last_pkt_sent == 0 ? 1 : getRandom(0.6);
       returnSuccess = getRandom(0.7);
 
+      if(!timer_call){
+        timer_call++;
+        intervalID = setInterval(countdown,1000);
+      }
+
+      if(returnSuccess*success){
+        // countdown(1);
+        clearInterval(intervalID);
+        timer_call = 0;
+        force_resend = false;
+      }
 
       // await callDblPkt(success, returnSuccess);
 
       callDblPkt(success, returnSuccess);
       // callDblPkt(1, 1);
+    } else if (force_resend){
+      logEntry(`!!!Previous pkts exceded waiting time - Use RESEND!!!`)
     } else if (last_pkt_sent + 1 > end) {
       logEntry(`Sender: Window end reached, cannot send next pkt`);
+    // } else if (last_ack_received >= start || !(start == p2_maxPkt - windowSize + 1)) {
     } else if (last_ack_received >= start) {
       logEntry(`ar ${ack_reached}`);
       logEntry(`!!!Please move the window first!!!`);
     }
-  } else if (type == 2) {
-    if(time_out){
-      resendPkt = Number(document.getElementById("resend_pkt").value);
+  } 
+  
+  /* RESEND */
+  else if (type == 2) {
+    if(force_resend){
+      var resend_input = document.getElementById("resend_pkt");
+      var resendPkt = Number(resend_input.value);
       if(resendPkt == last_ack_received + 1 && resendPkt <= max_pkt_sent){
         // console.log("here",resendPkt);
+        resend_input.value = `${resendPkt == 10? 10 : resendPkt + 1}`;
+
         callDblPkt(1,1,resendPkt);
+        if(resendPkt == max_pkt_sent){
+          // allow send new
+          clearInterval(intervalID);
+          force_resend = false;
+          timer_call = 0;
+        }
       } else {
         logEntry("!!!Invalid Pkt RESEND!!!");
       }
@@ -731,3 +769,28 @@ async function p3_button_press(user,type){
   }
   sending = 0;
 }
+
+
+function countdown(reset = 0){
+  if(!reset){
+  duration = duration ? --duration:0;
+  // logEntry(`time: ${duration} ${force_resend}`);
+  force_resend = !duration;
+  } else {
+    duration = time_out_duration;
+    force_resend = 0;
+  }
+  const countdownDiv = document.getElementById("timer");
+  countdownDiv.textContent = `Time out in: ${duration} - ${force_resend}`;
+
+}
+
+// setInterval(countdown,1000);
+
+
+/**
+ * once the timeout for one pkt has come, we'll force the user to do only resend
+ * this will be done by setting force_resend to 1 untill the last_sent_pkt is equal to max_pkt_sent
+ * 
+ * 
+ */
