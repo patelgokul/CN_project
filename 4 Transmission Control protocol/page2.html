@@ -14,7 +14,7 @@
     />
     <link rel="stylesheet" href="/src/css/style1.css" />
 
-    <title>Stop and Wait</title>
+    <title>GBN - Sender</title>
   </head>
 
   <body class="body">
@@ -58,66 +58,68 @@
         </div>
       </div>
     </nav>
-    <br /><br />
-    <div class="content" >
+    <br >
+    <div style="display: flex;">
       <!-- <div style="align-items: center; align-content: center; text-align: center;">
         <br>
         <table align="center" style="font-size: larger;" class="window-table">
           <tbody>
-                        <tr >
-                            <td id="tab_1">1</td>
-                            <td id="tab_2">2</td>
-                            <td id="tab_3">3</td>
-                            <td id="tab_4">4</td>
-                            <td id="tab_5">5</td>
-                            <td id="tab_6">6</td>
-                            <td id="tab_7">7</td>
-                          </tr>
-                          
-                        </tbody>
-                      </table>
-                    </div> -->
-        <span style="flex-direction: column; justify-content:center; width: 20%;">
+              <tr >
+                  <td id="tab_1">1</td>
+                  <td id="tab_2">2</td>
+                  <td id="tab_3">3</td>
+                  <td id="tab_4">4</td>
+                  <td id="tab_5">5</td>
+                  <td id="tab_6">6</td>
+                  <td id="tab_7">7</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div> -->
+        <div style="margin: 2% ; flex-direction: column; justify-content:center; width: 150px !important;">
 
           <div>
             <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p2_buttonPress(0)">Move window</button>
           </div>
             <br>
             <div>
-              <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 130px;" onclick="p2_buttonPress(1)">Send Next</button>
+              <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 130px;" onclick="p2_buttonPress(1)">Send New</button>
             </div>
             <br>
             <div style="flex-direction: row;">
               <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p2_buttonPress(2)">Re-Send</button>
-              <input type="number" id="resend_pkt" min="1" max="7" value="1" style=" width: 50px;">
+              <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 50px;">
           </div>
-        </span>
-        
-        <span id="ray-name" style="display: flex; flex-direction: column;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 400px;">
 
-        </span>
+          <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
+  
+          </div>
+  
+          <div id="canvas" style="width: 365px;">
+            
+            </div>
+        </div>
+        <div id="status-box" style="flex: 1; left: 50%;">
+          <!-- <div id="timer" style="height: 30px; font-size: 25px; margin-bottom: 5px; font-family: 'Source Code Pro';">
 
-        <span id="canvas" class="canvas-div" style="flex-direction: row;">
-          <!-- <span style="float: left;">
-            <p style=" width: 20px;">abc</p>
-            <canvas width="350" height="25"></canvas>
-            <span style="flex-direction: row; float: left;">
-              <p style="width: 50px; float: left;">abc</p>
-             </span> -->
-            <!-- <span style="flex-direction: row; float: left;"> -->
-              <!-- <canvas width="350" height="25" id="return0" style="float: right; border-width: 0px 2px; border-style: solid; border-color: initial"></canvas> -->
+          </div> -->
 
-            </span>
-          </span>
-        </span>
-        <div id="status-box" style="background-color: white; width: 40%;">
+          <div id="Log-span" style=" width: 450px; overflow-y: scroll; height:400px; background-color: rgb(160, 212, 255) !important;">
             <h5>Communication log: </h5>
-            <ul id="log"></ul>
+            <span >
+              <ol id="log"></ol>
+            </span>
+          </div>
         </div>
         
     </div>
     <br><br>
   </body>
 
-  <script src="/src/js/main.js"></script>
+  <script src="/src/js/main.js">
+
+  </script>
 </html>
