@@ -641,11 +641,7 @@ async function p2_buttonPress(type) {
         start = p2_maxPkt - windowSize + 1;
         logEntry("!!Window cannot be moved further!!");
       }
-
-
-      // if(start > p2_maxPkt)
-      // logEntry(`start: ${start}; end: ${end}`);
-      logEntry(`New start of window - ${start}`);
+      else logEntry(`New start of window - ${start}`);
 
     } else {
       logEntry("!!! Invalid move window !!!");
@@ -719,25 +715,17 @@ async function p2_buttonPress(type) {
 
 
   }
-  logEntry(`${ray_counter} - s: ${start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
+  // logEntry(`${ray_counter} - s: ${start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
 
-  // p2_window_handler();
   for (var i = 1; i <= p2_maxPkt; i++) {
     if (i == start) p2_head[i - 1].className = "window-start";
     else if (i == end) p2_head[i - 1].className = "window-end";
     else if (i > start && i < end) p2_head[i - 1].className = "window-inside";
     else p2_head[i - 1].className = "";
   }
-  // for(var i = start ; i <= end ; i++){
-  //   if(i == start) p2_head[i - 1].className = 'window-start';
-  //   else if(i == end) p2_head[i - 1].className = 'window-end';
-  //   else p2_head[i - 1].className = 'window-inside';
-  // }
 
   if(last_ack_received == p2_maxPkt){
     clearInterval(intervalID);
-    start = 100;
-    last_ack_received = 100;
     await delay(4000);
     alert("Please proceed to next page...");
   }
@@ -813,26 +801,6 @@ function countdown(){
   // li.appendChild(text);
   // timelog.appendChild(li);
   // li.scrollIntoView();
-
-}
-
-function p2_window_handler(){
-  for(var i=1;i<=p2_maxPkt;i++){
-    p2_head[i - 1].className = '';
-    p2_sent[i - 1].innerHTML = i <= max_pkt_sent ? '✔':'';
-  }
-
-  for(var i=start;i<=end;i++){
-    if(i == start) p2_head[i - 1].className = 'window-start';
-    else if(i == end) p2_head[i - 1].className = 'window-end';
-    else p2_head[i - 1].className = 'window-inside';
-  }
-
-  for(var i=1;i<=p2_maxPkt;i++){
-    p2_ack[i - 1].innerHTML = i <= last_ack_received ? '✔':'';
-  }
-
-
 
 }
 
