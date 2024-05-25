@@ -22,7 +22,7 @@ var ack_reached = 0;
 var timer_call = 0;
 /** 1 on timeout */
 var force_resend = false;
-const time_out_duration = 10;
+const time_out_duration = 30;
 var duration = time_out_duration;
 var intervalID;
 
@@ -399,6 +399,12 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
   // else
   //   logEntry(`Sender: Pkt${last_pkt_sent} sent but not received by receiver`);
   
+
+  for(var i = 1 ; i <= p2_maxPkt ; i++){
+    p2_head[i - 1].className = '';
+    p2_sent[i - 1].innerHTML = i <= max_pkt_sent ? '✔':'';
+  }
+
   await delay(2000, 1);
   
   var return_ctx = return_canvas.getContext("2d");
@@ -417,6 +423,10 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
     ack_reached = 0;
     await delay(2000, 1);
     ack_reached = ret_len == 350;
+
+    for(var i=1;i<=p2_maxPkt;i++){
+      p2_ack[i - 1].innerHTML = i <= last_ack_received ? '✔':'';
+    }
   }
 
   return;
@@ -631,12 +641,14 @@ async function p2_buttonPress(type) {
         start = p2_maxPkt - windowSize + 1;
         logEntry("!!Window cannot be moved further!!");
       }
+
+
       // if(start > p2_maxPkt)
       // logEntry(`start: ${start}; end: ${end}`);
       logEntry(`New start of window - ${start}`);
+
     } else {
       logEntry("!!! Invalid move window !!!");
-      // alert("!!! Invalid move window !!!");
     }
   } 
   
@@ -655,10 +667,11 @@ async function p2_buttonPress(type) {
 
       if(!timer_call){
         timer_call++;
+        duration = time_out_duration;
         intervalID = setInterval(countdown,1000);
       }
 
-      if(returnSuccess*success){
+      if(returnSuccess*success && last_ack_received == last_pkt_sent){
         // countdown(1);
         clearInterval(intervalID);
         timer_call = 0;
@@ -708,7 +721,21 @@ async function p2_buttonPress(type) {
   }
   logEntry(`${ray_counter} - s: ${start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
 
+  // p2_window_handler();
+  for (var i = 1; i <= p2_maxPkt; i++) {
+    if (i == start) p2_head[i - 1].className = "window-start";
+    else if (i == end) p2_head[i - 1].className = "window-end";
+    else if (i > start && i < end) p2_head[i - 1].className = "window-inside";
+    else p2_head[i - 1].className = "";
+  }
+  // for(var i = start ; i <= end ; i++){
+  //   if(i == start) p2_head[i - 1].className = 'window-start';
+  //   else if(i == end) p2_head[i - 1].className = 'window-end';
+  //   else p2_head[i - 1].className = 'window-inside';
+  // }
+
   if(last_ack_received == p2_maxPkt){
+    clearInterval(intervalID);
     start = 100;
     last_ack_received = 100;
     await delay(4000);
@@ -770,27 +797,55 @@ async function p3_button_press(user,type){
   sending = 0;
 }
 
-
-function countdown(reset = 0){
-  if(!reset){
+function countdown(){
   duration = duration ? --duration:0;
-  // logEntry(`time: ${duration} ${force_resend}`);
   force_resend = !duration;
-  } else {
-    duration = time_out_duration;
-    force_resend = 0;
-  }
+
+
   const countdownDiv = document.getElementById("timer");
-  countdownDiv.textContent = `Time out in: ${duration} - ${force_resend}`;
+  // countdownDiv.textContent = `Time-out in: ${duration} - ${force_resend}`;
+  countdownDiv.textContent = `Time-out in: ${duration}`;
+
+  // FOR TIME LOG
+  // var timelog = document.getElementById("time-log");
+  // let li = document.createElement("li");
+  // let text = document.createTextNode(`${duration}`);
+  // li.appendChild(text);
+  // timelog.appendChild(li);
+  // li.scrollIntoView();
 
 }
 
-// setInterval(countdown,1000);
+function p2_window_handler(){
+  for(var i=1;i<=p2_maxPkt;i++){
+    p2_head[i - 1].className = '';
+    p2_sent[i - 1].innerHTML = i <= max_pkt_sent ? '✔':'';
+  }
+
+  for(var i=start;i<=end;i++){
+    if(i == start) p2_head[i - 1].className = 'window-start';
+    else if(i == end) p2_head[i - 1].className = 'window-end';
+    else p2_head[i - 1].className = 'window-inside';
+  }
+
+  for(var i=1;i<=p2_maxPkt;i++){
+    p2_ack[i - 1].innerHTML = i <= last_ack_received ? '✔':'';
+  }
 
 
-/**
- * once the timeout for one pkt has come, we'll force the user to do only resend
- * this will be done by setting force_resend to 1 untill the last_sent_pkt is equal to max_pkt_sent
- * 
- * 
- */
+
+}
+
+var p2_head = [];
+var p2_sent = [];
+var p2_ack = [];
+
+function p2_get_window(){
+  for(var i=0;i<p2_maxPkt;i++){
+    p2_head.push(document.getElementById(`pkt${i+1}-head`));
+    p2_sent.push(document.getElementById(`pkt${i+1}-sent`));
+    p2_ack.push(document.getElementById(`pkt${i+1}-ack`));
+  }
+}
+
+p2_get_window();

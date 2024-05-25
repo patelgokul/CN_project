@@ -147,3 +147,44 @@ input {
   justify-content: center;
 }
 
+.window-start{
+  border-top: orangered;
+  border-bottom: orangered;
+  border-left: orangered;
+  border-bottom-width: 4px;
+  border-top-width: 4px;
+  border-style:groove;
+  border-left-width: 2px;
+  /* padding: 5px; */
+  
+}
+
+.window-end{
+  border-top: orangered;
+  border-bottom: orangered;
+  border-right: orangered;
+  border-bottom-width: 4px;
+  border-top-width: 4px;
+  border-style:groove;
+  border-right-width: 2px;
+  /* padding: 5px; */
+}
+
+.window-inside{
+  border-top: orangered;
+  border-bottom: orangered;
+  border-style: groove;
+  border-right-width: 0px;
+  border-left-width: 0px;
+  border-bottom-width: 4px;
+  border-top-width: 4px;
+  /* padding: 5px; */
+}
+
+th{
+  padding: 6px;
+}
+
+td{
+  padding: 0;
+}

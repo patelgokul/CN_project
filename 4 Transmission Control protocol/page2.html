@@ -77,21 +77,74 @@
               </tbody>
             </table>
           </div> -->
-        <div style="margin: 2% ; flex-direction: column; justify-content:center; width: 150px !important;">
-
           <div>
-            <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p2_buttonPress(0)">Move window</button>
-          </div>
-            <br>
-            <div>
-              <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 130px;" onclick="p2_buttonPress(1)">Send New</button>
+            <div style="margin: 2% ; flex-direction: column; justify-content:center; width: 300px !important;">
+    
+              <div>
+                <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p2_buttonPress(0)">Move window</button>
+              </div>
+                <br>
+                <div>
+                  <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 130px;" onclick="p2_buttonPress(1)">Send New</button>
+                </div>
+                <br>
+                <div style="flex-direction: row;">
+                  <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p2_buttonPress(2)">Re-Send</button>
+                  <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 50px;">
+              </div>
+              <br>
             </div>
-            <br>
-            <div style="flex-direction: row;">
-              <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p2_buttonPress(2)">Re-Send</button>
-              <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 50px;">
+            <div style="margin-left: 2%; border: 5px ridge white; padding: 5px; width: 280px; text-align: center;">
+              <!-- for window -->
+              <b>Current Window:</b>
+
+              <br>
+              <br>
+              <table>
+                <tr>
+                  <th>Pkt</th>
+                  <th id="pkt1-head">1</th>
+                  <th id="pkt2-head">2</th>
+                  <th id="pkt3-head">3</th>
+                  <th id="pkt4-head">4</th>
+                  <th id="pkt5-head">5</th>
+                  <th id="pkt6-head">6</th>
+                  <th id="pkt7-head">7</th>
+                  <th id="pkt8-head">8</th>
+                  <th id="pkt9-head">9</th>
+                  <th id="pkt10-head">10</th>
+                </tr>
+                <tr>
+                    <td>Sent</td>
+                    <td id="pkt1-sent"></td>
+                    <td id="pkt2-sent"></td>
+                    <td id="pkt3-sent"></td>
+                    <td id="pkt4-sent"></td>
+                    <td id="pkt5-sent"></td>
+                    <td id="pkt6-sent"></td>
+                    <td id="pkt7-sent"></td>
+                    <td id="pkt8-sent"></td>
+                    <td id="pkt9-sent"></td>
+                    <td id="pkt10-sent"></td>
+                </tr>
+                <tr>
+                    <td>ACK</td>
+                    <td id="pkt1-ack"></td>
+                    <td id="pkt2-ack"></td>
+                    <td id="pkt3-ack"></td>
+                    <td id="pkt4-ack"></td>
+                    <td id="pkt5-ack"></td>
+                    <td id="pkt6-ack"></td>
+                    <td id="pkt7-ack"></td>
+                    <td id="pkt8-ack"></td>
+                    <td id="pkt9-ack"></td>
+                    <td id="pkt10-ack"></td>
+                </tr>
+              </table>
+    
+            </div>
+
           </div>
-        </div>
         <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 410px;">
 
           <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
@@ -104,17 +157,23 @@
         </div>
         <div id="status-box" style="flex: 1; left: 50%;">
           <div id="timer" style="width: 450px; height: 30px; font-size: 25px; margin-bottom: 5px; font-family: 'Source Code Pro'; text-align: center;">
-            Time out in: 
+            Time-out in: 
             --
           </div>
 
           <div id="Log-span" style=" width: 450px; ">
-            <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 10px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
+            <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
             <div style="overflow-y: scroll; height:350px; background-color: rgb(160, 212, 255) !important;">
               <ol id="log"></ol>
             </div>
           </div>
         </div>
+        <!-- <div id="Time-Log-span" style=" width: 100px; ">
+          <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgb(160, 212, 255) !important; margin: 0;">Time</h5>
+          <div style="overflow-y: scroll; height:350px; background-color: rgb(160, 212, 255) !important;">
+            <ol id="time-log"></ol>
+          </div>
+        </div> -->
         
     </div>
     <br><br>
