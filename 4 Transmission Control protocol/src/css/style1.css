@@ -56,6 +56,18 @@ input {
 	background-color: #39B3D7;
 }
 
+
+.btn3d.btn-purple {
+	box-shadow: 0 0 0 1px #ffa9a9 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #e18181, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #fa99da;
+}
+
+.btn3d.btn-purple:active,
+.btn3d.btn-purple.active {
+	box-shadow: 0 0 0 1px #ffa9a9 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #fa99da;
+}
+
 .btn3d.btn-green {
 	box-shadow: 0 0 0 1px #71ff62 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #39d746, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
 	background-color: #4fff6f;

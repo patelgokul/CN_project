@@ -9,7 +9,7 @@ let success = true;
 let returnSuccess = true;
 
 const windowSize = 4;
-const p2_maxPkt = 10;
+const p2_maxPkt = 10; 
 const p4_maxPkt = 8;
 var ray_counter = 0;
 var last_pkt_sent = 0;
@@ -26,6 +26,8 @@ var force_resend = false;
 const time_out_duration = 30;
 var duration = time_out_duration;
 var intervalID;
+
+var end_ = 0;
 
 var p3_count = 0;
 
@@ -491,7 +493,9 @@ async function callDblPkt(success, returnSuccess, resend_pkt_no = 0) {
     logEntry(`Receiver: ACK${resend_pkt_no} sent and received by sender`);
     last_ack_sent = resend_pkt_no;
     last_pkt_sent = resend_pkt_no;
-    last_ack_received = resend_pkt_no;
+
+    if(document.title == "GBN - Sender") last_ack_received = resend_pkt_no;
+
     lar = resend_pkt_no;
     await doublePkt(
       ray_counter,
@@ -518,7 +522,7 @@ async function callDblPkt(success, returnSuccess, resend_pkt_no = 0) {
         max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
 
       // await delay(2000);
-      // last_ack_received = last_ack_sent;
+      if(document.title == "GBN - Sender") last_ack_received = resend_pkt_no;
       lar = last_ack_sent;
       await doublePkt(
         ray_counter,
@@ -558,7 +562,7 @@ async function callDblPkt(success, returnSuccess, resend_pkt_no = 0) {
 
     await doublePkt(ray_counter, length / 2, 0, ` pkt${last_pkt_sent}`, ` `);
   }
-  last_ack_received = lar;
+  if(document.title != "GBN - Sender") last_ack_received = lar;
   return await delay(2000);
 }
 
@@ -710,7 +714,7 @@ async function p2_buttonPress(type) {
         logEntry("!!!Invalid Pkt RESEND!!!");
       }
     } else {
-      logEntry("!!!Invalid RESEND!!!");
+      logEntry("!!!Wait time-out!!!");
     }
   }
   // logEntry(`${ray_counter} - s: ${start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
@@ -779,6 +783,8 @@ async function p3_button_press(user, type) {
 
 async function p4_button_press(type) {
 
+  if(end_) return;
+
   // we have success = returnSucces = 1 always
   // so last_pkt_sent = last_ack_received = last_ack_sent
 
@@ -787,9 +793,9 @@ async function p4_button_press(type) {
     if (end <= p4_maxPkt && last_ack_received >= start && ack_reached) {
       start++;
       end++;
-      if (end > p2_maxPkt) {
-        end = p2_maxPkt;
-        start = p2_maxPkt - windowSize + 1;
+      if (end > p4_maxPkt) {
+        end = p4_maxPkt;
+        start = p4_maxPkt - windowSize + 1;
         logEntry("!!Window cannot be moved further!!");
       } else logEntry(`New start of window - ${start}`);
     } else {
@@ -799,12 +805,14 @@ async function p4_button_press(type) {
 
   // SEND NEXT PKT
   else if (type == 1) {
-    if(end == p4_maxPkt){
+    if(end == p4_maxPkt && last_pkt_sent < p4_maxPkt){
       callDblPkt(1,1);
+    } else if(last_pkt_sent >= p4_maxPkt) {
+      logEntry("!!! No more packets to send !!!");
     } else if(last_pkt_sent + 1 <= end && (!ack_reached || last_ack_received + 1 <= start)){
-      if(p4_windowSize == 1 + last_ack_received) callDblPkt(1, 1);
-      else if (last_ack_sent <= end && p4_windowSize == last_ack_received + 1) callDblPkt(1, 1);
-      else logEntry("!!!Please increase window size!!!");
+        if(p4_windowSize == 1 + last_ack_received) callDblPkt(1, 1);
+        else if (last_ack_sent <= end && p4_windowSize == last_ack_received + 1) callDblPkt(1, 1);
+        else logEntry("!!!Please increase window size!!!");
     } else if (last_pkt_sent + 1 > end) {
       logEntry(`Sender: Window end reached, cannot send next pkt`);
     } else if (last_ack_received >= start) {
@@ -831,6 +839,12 @@ async function p4_button_press(type) {
     if (i == start) pkt_head[i - 1].className += "window-start ";
     if (i == end) pkt_head[i - 1].className += "window-end ";
     if (i > start && i < end) pkt_head[i - 1].className += "window-inside ";
+  }
+
+  if(last_pkt_sent == p4_maxPkt){
+    end_ = 1;
+    await delay(4500,1);
+    alert("Proceed to next page.....");
   }
 }
 
