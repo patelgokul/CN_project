@@ -10,13 +10,14 @@ let returnSuccess = true;
 
 const windowSize = 4;
 const p2_maxPkt = 10;
+const p4_maxPkt = 8;
 var ray_counter = 0;
 var last_pkt_sent = 0;
 var last_ack_sent = 0;
 var last_ack_received = 0;
 var max_pkt_sent = 0;
 var start = 1;
-var end = start + windowSize - 1;
+var end;
 var ack_reached = 0;
 
 var timer_call = 0;
@@ -25,7 +26,6 @@ var force_resend = false;
 const time_out_duration = 30;
 var duration = time_out_duration;
 var intervalID;
-
 
 var p3_count = 0;
 
@@ -45,12 +45,10 @@ function logEntry(msg) {
   li.scrollIntoView();
 }
 
-
 function delay(ms, inc_ray_counter = 0) {
   ray_counter += inc_ray_counter;
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
 
 /**
  * @param {Number} angle in degrees, +ve in anti-clockwise
@@ -168,8 +166,10 @@ async function callAnimateRay(dir, success) {
   return await delay(900 + success * 800);
 }
 
-
 async function doublePkt(idx, send_len, ret_len, pn, an) {
+
+
+  ack_reached = 0;
   // Animate the ray
   var progress = 0;
   function animate1() {
@@ -384,7 +384,7 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
   div.appendChild(span2);
 
   t2.scrollIntoView();
-  
+
   var send_ctx = send_canvas.getContext("2d");
   // send ray
   var ctx = send_ctx;
@@ -395,18 +395,24 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
   var ack = 0;
   requestAnimationFrame(animate1);
   // if(send_len == 350)
-    //   logEntry(`Sender: Pkt${last_pkt_sent} sent and received by receiver`);
+  //   logEntry(`Sender: Pkt${last_pkt_sent} sent and received by receiver`);
   // else
   //   logEntry(`Sender: Pkt${last_pkt_sent} sent but not received by receiver`);
-  
 
-  for(var i = 1 ; i <= p2_maxPkt ; i++){
-    p2_head[i - 1].className = '';
-    p2_sent[i - 1].innerHTML = i <= max_pkt_sent ? '✔':'';
+  if (document.title == "GBN - Sender") {
+    for (var i = 1; i <= p2_maxPkt; i++) {
+      pkt_head[i - 1].className = "";
+      pkt_sent[i - 1].innerHTML = i <= max_pkt_sent ? "✔" : "";
+    }
+  } else if (document.title == "Slow-Start") {
+    for (var i = 1; i <= p4_maxPkt; i++) {
+      pkt_head[i - 1].className = "";
+      pkt_sent[i - 1].innerHTML = i <= max_pkt_sent ? "✔" : "";
+    }
   }
 
   await delay(2000, 1);
-  
+
   var return_ctx = return_canvas.getContext("2d");
   var ctx2 = return_ctx;
   var startX20 = length;
@@ -416,47 +422,55 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
   var ack2 = 1;
   if (ret_len) {
     requestAnimationFrame(animate2);
+    // console.log(ack_reached);
     // if(ret_len == 350)
-    //   logEntry(`Receiver: ACK${last_ack_sent} sent and received by sender`);
+      //   logEntry(`Receiver: ACK${last_ack_sent} sent and received by sender`);
     // else
     //   logEntry(`Receiver: ACK${last_ack_sent} sent but not received by sender`);
     ack_reached = 0;
+    // console.log(ack_reached);
     await delay(2000, 1);
+    // console.log(ack_reached);
     ack_reached = ret_len == 350;
+    // console.log(ack_reached);
 
-    for(var i=1;i<=p2_maxPkt;i++){
-      p2_ack[i - 1].innerHTML = i <= last_ack_received ? '✔':'';
+  if (document.title == "GBN - Sender") {
+      for (var i = 1; i <= p2_maxPkt; i++) {
+      pkt_ack[i - 1].innerHTML = i <= last_ack_sent ? "✔" : "";
     }
+  } else if (document.title == "Slow-Start") {
+    
+    for (var i = 1; i <= p4_maxPkt; i++) {
+    pkt_ack[i - 1].innerHTML = i <= last_ack_sent ? "✔" : "";
+  }
+  }
+
+
   }
 
   return;
 }
 
-
-async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
-  
+async function callDblPkt(success, returnSuccess, resend_pkt_no = 0) {
   // timer code
   {
-  // if(success&&returnSuccess)
-  //   timer_call ++;
-  // const countdownDiv = document.getElementById("timer");
+    // if(success&&returnSuccess)
+    //   timer_call ++;
+    // const countdownDiv = document.getElementById("timer");
 
-  // if(last_ack_sent == last_pkt_sent && returnSuccess && success){
-  //   countdownDiv.innerHTML = "--:--";
-  //   // return;
-  // }
-  // else
+    // if(last_ack_sent == last_pkt_sent && returnSuccess && success){
+    //   countdownDiv.innerHTML = "--:--";
+    //   // return;
+    // }
+    // else
     {
       // const countdown = setInterval(() => {
       // const minutes = Math.floor(duration / 60);
       // const seconds = duration % 60;
-    
       // // countdownDiv.style.color = "black";
       // // countdownDiv.style.opacity = 1;
       // // countdownDiv.innerText = `pkt${last_ack_received + 1} - ${minutes}:${seconds.toString().padStart(2, "0")}`;
-    
       // duration--;
-    
       // if (duration < 0 || timer_call > last_pkt_sent) {
       //   time_out = 1;
       //   console.log(duration,timer_call,last_pkt_sent);
@@ -466,21 +480,19 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
       //   // setInterval(() => {countdownDiv.style.opacity = (countdownDiv.style.opacity == 0.3) ? 1 : 0.3;},500);
       //         }
       //   }, 1000);
-
     }
-  
   }
-
-  if(resend_pkt_no){
+  var lar = last_ack_received;
+  if (resend_pkt_no) {
     // success - resent pkt number
     // time_out = 0;
     logEntry(`Sender: Pkt${resend_pkt_no} sent and received by receiver`);
     delay(2000);
     logEntry(`Receiver: ACK${resend_pkt_no} sent and received by sender`);
-    last_ack_received = resend_pkt_no;
     last_ack_sent = resend_pkt_no;
     last_pkt_sent = resend_pkt_no;
-    max_pkt_sent = max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
+    last_ack_received = resend_pkt_no;
+    lar = resend_pkt_no;
     await doublePkt(
       ray_counter,
       length,
@@ -488,11 +500,8 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
       ` pkt${resend_pkt_no}`,
       ` ack${resend_pkt_no}`
     );
-
-    
-  }
-
-  else if (success) {
+    max_pkt_sent = max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
+  } else if (success) {
     if (returnSuccess) {
       // last_pkt_sent++;
       // last_ack_received = last_ack_sent;
@@ -505,10 +514,12 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
           last_pkt_sent == 1 + last_ack_sent ? ++last_ack_sent : last_ack_sent
         } sent and received by sender`
       );
-    max_pkt_sent = max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
+      max_pkt_sent =
+        max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
 
       // await delay(2000);
-      last_ack_received = last_ack_sent;
+      // last_ack_received = last_ack_sent;
+      lar = last_ack_sent;
       await doublePkt(
         ray_counter,
         length,
@@ -528,8 +539,8 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
         } sent but not received by sender`
       );
 
-    max_pkt_sent = max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
-
+      max_pkt_sent =
+        max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
 
       await doublePkt(
         ray_counter,
@@ -547,11 +558,9 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
 
     await doublePkt(ray_counter, length / 2, 0, ` pkt${last_pkt_sent}`, ` `);
   }
-
+  last_ack_received = lar;
   return await delay(2000);
 }
-
-
 
 // function p2_timer(pkt_no, clear = 0) {
 //   var duration = 2;
@@ -561,7 +570,7 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
 //     countdownDiv.innerHTML = "--:--";
 //     return;
 //   }
-  
+
 //   const countdown = setInterval(() => {
 //     const minutes = Math.floor(duration / 60);
 //     const seconds = duration % 60;
@@ -579,9 +588,7 @@ async function callDblPkt(success, returnSuccess,resend_pkt_no = 0) {
 //     }
 //   }, 1000);
 
-  
 // }
-
 
 async function p1_buttonPress(type) {
   if (countACK == 0 && success && returnSuccess) await p1_sendPacket();
@@ -593,7 +600,6 @@ async function p1_buttonPress(type) {
     else await p1_sendPacket();
   }
 }
-
 
 async function p1_sendPacket() {
   if (countACK >= 2) return;
@@ -627,32 +633,28 @@ async function p1_sendPacket() {
   }
 }
 
-
 async function p2_buttonPress(type) {
-
   /* MOVE WINDOW */
 
   if (!type) {
     if (end <= p2_maxPkt && last_ack_received >= start) {
       start++;
       end++;
-      if(end > p2_maxPkt){
+      if (end > p2_maxPkt) {
         end = p2_maxPkt;
         start = p2_maxPkt - windowSize + 1;
         logEntry("!!Window cannot be moved further!!");
-      }
-      else logEntry(`New start of window - ${start}`);
-
+      } else logEntry(`New start of window - ${start}`);
     } else {
       logEntry("!!! Invalid move window !!!");
     }
-  } 
-  
+  } else if (type == 1) {
+
   /* SEND NEW */
-  
-  else if (type == 1) {
     if (
-      (!ack_reached || (last_ack_received < start || start == p2_maxPkt - windowSize + 1)) &&
+      (!ack_reached ||
+        last_ack_received < start ||
+        start == p2_maxPkt - windowSize + 1) &&
       last_pkt_sent + 1 <= end &&
       !force_resend
     ) {
@@ -661,13 +663,13 @@ async function p2_buttonPress(type) {
       success = last_pkt_sent == 0 ? 1 : getRandom(0.6);
       returnSuccess = getRandom(0.7);
 
-      if(!timer_call){
+      if (!timer_call) {
         timer_call++;
         duration = time_out_duration;
-        intervalID = setInterval(countdown,1000);
+        intervalID = setInterval(countdown, 1000);
       }
 
-      if(returnSuccess*success && last_ack_received == last_pkt_sent){
+      if (returnSuccess * success && last_ack_received == last_pkt_sent) {
         // countdown(1);
         clearInterval(intervalID);
         timer_call = 0;
@@ -678,28 +680,27 @@ async function p2_buttonPress(type) {
 
       callDblPkt(success, returnSuccess);
       // callDblPkt(1, 1);
-    } else if (force_resend){
-      logEntry(`!!!Previous pkts exceded waiting time - Use RESEND!!!`)
+    } else if (force_resend) {
+      logEntry(`!!!Previous pkts exceded waiting time - Use RESEND!!!`);
     } else if (last_pkt_sent + 1 > end) {
       logEntry(`Sender: Window end reached, cannot send next pkt`);
-    // } else if (last_ack_received >= start || !(start == p2_maxPkt - windowSize + 1)) {
+      // } else if (last_ack_received >= start || !(start == p2_maxPkt - windowSize + 1)) {
     } else if (last_ack_received >= start) {
       logEntry(`ar ${ack_reached}`);
       logEntry(`!!!Please move the window first!!!`);
     }
-  } 
-  
+  } else if (type == 2) {
+
   /* RESEND */
-  else if (type == 2) {
-    if(force_resend){
+    if (force_resend) {
       var resend_input = document.getElementById("resend_pkt");
       var resendPkt = Number(resend_input.value);
-      if(resendPkt == last_ack_received + 1 && resendPkt <= max_pkt_sent){
+      if (resendPkt == last_ack_received + 1 && resendPkt <= max_pkt_sent) {
         // console.log("here",resendPkt);
-        resend_input.value = `${resendPkt == 10? 10 : resendPkt + 1}`;
+        resend_input.value = `${resendPkt == 10 ? 10 : resendPkt + 1}`;
 
-        callDblPkt(1,1,resendPkt);
-        if(resendPkt == max_pkt_sent){
+        callDblPkt(1, 1, resendPkt);
+        if (resendPkt == max_pkt_sent) {
           // allow send new
           clearInterval(intervalID);
           force_resend = false;
@@ -708,87 +709,134 @@ async function p2_buttonPress(type) {
       } else {
         logEntry("!!!Invalid Pkt RESEND!!!");
       }
-
     } else {
       logEntry("!!!Invalid RESEND!!!");
     }
-
-
   }
   // logEntry(`${ray_counter} - s: ${start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
 
   for (var i = 1; i <= p2_maxPkt; i++) {
-    if (i == start) p2_head[i - 1].className = "window-start";
-    else if (i == end) p2_head[i - 1].className = "window-end";
-    else if (i > start && i < end) p2_head[i - 1].className = "window-inside";
-    else p2_head[i - 1].className = "";
+    if (i == start) pkt_head[i - 1].className = "window-start";
+    else if (i == end) pkt_head[i - 1].className = "window-end";
+    else if (i > start && i < end) pkt_head[i - 1].className = "window-inside";
+    else pkt_head[i - 1].className = "";
   }
 
-  if(last_ack_received == p2_maxPkt){
+  if (last_ack_received == p2_maxPkt) {
+    last_ack_received++;
     clearInterval(intervalID);
-    await delay(4000);
+    await delay(3900);
     alert("Please proceed to next page...");
   }
 }
 
+var p4_windowSize = 1;
 
-async function p3_button_press(user,type){
-
-  if(sending){
+async function p3_button_press(user, type) {
+  if (sending) {
     logEntry("Invalid Button Press. Please wait.");
     return;
   }
 
-  if(!p3_count){
-    if(!user && !type){
+  if (!p3_count) {
+    if (!user && !type) {
       // send syn
-      p3_count ++;
+      p3_count++;
       logEntry("Sender: SYN sent");
       sending = 1;
-      await callAnimateRay(1,1);
+      await callAnimateRay(1, 1);
       sending = 0;
-      
-    }
-    else{
+    } else {
       logEntry(`${!user ? "Sender" : "Receiver"}: Invalid Handshake`);
     }
-  }
-  else if(p3_count == 1){
-    if(user && type==1){
+  } else if (p3_count == 1) {
+    if (user && type == 1) {
       // receiver - synack
-      p3_count ++;
+      p3_count++;
       logEntry("Receiver: SYN+ACK sent");
       sending = 1;
-      await callAnimateRay(0,1);
+      await callAnimateRay(0, 1);
       sending = 0;
-    }
-    else{
+    } else {
       logEntry(`${!user ? "Sender" : "Receiver"}: Invalid Handshake`);
-      
     }
-  }
-  else{
-    if(!user && type == 2){
+  } else {
+    if (!user && type == 2) {
       // sender - ack
-      p3_count ++;
+      p3_count++;
       logEntry("Sender: ACK sent");
       sending = 1;
-      await callAnimateRay(1,1);
+      await callAnimateRay(1, 1);
       sending = 0;
 
-      alert("Procede to next page...")
-    }
-    else{
+      alert("Procede to next page...");
+    } else {
       logEntry(`${!user ? "Sender" : "Receiver"}: Invalid Handshake`);
     }
   }
   sending = 0;
 }
 
-function countdown(){
-  duration = duration ? --duration:0;
-  force_resend = !duration;
+async function p4_button_press(type) {
 
+  // we have success = returnSucces = 1 always
+  // so last_pkt_sent = last_ack_received = last_ack_sent
+
+  // MOVE WINDOW
+  if (!type) {
+    if (end <= p4_maxPkt && last_ack_received >= start && ack_reached) {
+      start++;
+      end++;
+      if (end > p2_maxPkt) {
+        end = p2_maxPkt;
+        start = p2_maxPkt - windowSize + 1;
+        logEntry("!!Window cannot be moved further!!");
+      } else logEntry(`New start of window - ${start}`);
+    } else {
+      logEntry("!!! Invalid move window !!!");
+    }
+  }
+
+  // SEND NEXT PKT
+  else if (type == 1) {
+    if(end == p4_maxPkt){
+      callDblPkt(1,1);
+    } else if(last_pkt_sent + 1 <= end && (!ack_reached || last_ack_received + 1 <= start)){
+      if(p4_windowSize == 1 + last_ack_received) callDblPkt(1, 1);
+      else if (last_ack_sent <= end && p4_windowSize == last_ack_received + 1) callDblPkt(1, 1);
+      else logEntry("!!!Please increase window size!!!");
+    } else if (last_pkt_sent + 1 > end) {
+      logEntry(`Sender: Window end reached, cannot send next pkt`);
+    } else if (last_ack_received >= start) {
+      logEntry(`ar ${ack_reached}`);
+      logEntry(`!!!Window start is already sent!!!`);
+    }
+  }
+
+  // INCREASE WINDOW SIZE
+  else {
+    if(end < p4_maxPkt && (p4_windowSize <= last_ack_received)){
+      end++;
+      p4_windowSize++;
+    } else if(!(end < p4_maxPkt)) logEntry("!!!Window size exceeeding limits!!!");
+    else logEntry("!!!Invalid increase in window size!!!");
+
+  }
+
+  logEntry(`${ray_counter} - s: ${start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
+
+
+  for (var i = 1; i <= p4_maxPkt; i++) {
+    pkt_head[i - 1].className = "";
+    if (i == start) pkt_head[i - 1].className += "window-start ";
+    if (i == end) pkt_head[i - 1].className += "window-end ";
+    if (i > start && i < end) pkt_head[i - 1].className += "window-inside ";
+  }
+}
+
+function countdown() {
+  duration = duration ? --duration : 0;
+  force_resend = !duration;
 
   const countdownDiv = document.getElementById("timer");
   // countdownDiv.textContent = `Time-out in: ${duration} - ${force_resend}`;
@@ -801,19 +849,29 @@ function countdown(){
   // li.appendChild(text);
   // timelog.appendChild(li);
   // li.scrollIntoView();
-
 }
 
-var p2_head = [];
-var p2_sent = [];
-var p2_ack = [];
+var pkt_head = [];
+var pkt_sent = [];
+var pkt_ack = [];
 
-function p2_get_window(){
-  for(var i=0;i<p2_maxPkt;i++){
-    p2_head.push(document.getElementById(`pkt${i+1}-head`));
-    p2_sent.push(document.getElementById(`pkt${i+1}-sent`));
-    p2_ack.push(document.getElementById(`pkt${i+1}-ack`));
+function get_window() {
+  
+  if (document.title == "GBN - Sender") {
+    end = start + windowSize - 1;
+    for (var i = 0; i < p2_maxPkt; i++) {
+      pkt_head.push(document.getElementById(`pkt${i + 1}-head`));
+      pkt_sent.push(document.getElementById(`pkt${i + 1}-sent`));
+      pkt_ack.push(document.getElementById(`pkt${i + 1}-ack`));
+    }
+  } else if (document.title == "Slow-Start") {
+    end = start + p4_windowSize - 1;
+    for (var i = 0; i < p4_maxPkt; i++) {
+      pkt_head.push(document.getElementById(`pkt${i + 1}-head`));
+      pkt_sent.push(document.getElementById(`pkt${i + 1}-sent`));
+      pkt_ack.push(document.getElementById(`pkt${i + 1}-ack`));
+    }
   }
 }
 
-p2_get_window();
+get_window();
