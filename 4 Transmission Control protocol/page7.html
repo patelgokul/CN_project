@@ -18,25 +18,32 @@
   </head>
 
   <body class="body">
-    <script src="/src/js/nav.js" id="navbar-5"></script>
-    
-    <br >
+    <script src="/src/js/nav.js" id="navbar-7"></script>
     <div style="display: flex;">
           <div>
-            <div style="margin: 2% ; flex-direction: column; justify-content:center; width: 300px !important;">
-    
-              <div style="text-align: center;">
-                <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 200px" onclick="p5_button_press(0)">Move Window</button>
-              </div>
-              <div style="text-align: center;">
-                <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 200px" onclick="p5_button_press(1)">Send New</button>
-              </div>
-              <div style="flex-direction: row; text-align: center">
-                <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p5_button_press(2)">Re-Send</button>
-                <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 50px;">
+            
+            
+            
+            <p class="para">Pkt Control</p>
+
+            <div style="display: grid; grid-template-columns: auto auto;text-align: center;">
+                  <div style="text-align: center;">
+                    <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 100px" onclick="p5_button_press(1)">Send New</button>
+                  </div>
+                  
+                  <div style="flex-direction: row; text-align: center">
+                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p5_button_press(2)">Re-Send</button>
+                    <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 30px;">
+                </div>
             </div>
-              <br>
-              <p style="margin: 0; text-align: center;">Window Size</p>
+
+            <hr style="height: 3px;">
+            <p class="para">Window Control</p>
+            <div style="text-align: center;">
+                <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 130px" onclick="p5_button_press(0)">Move Window</button>
+              </div>
+            <div style="margin: 2% ; flex-direction: column; justify-content:center; width: 300px !important;">
+              <p class="subPara">Window Size</p>
             <div style="display: grid; grid-template-columns: auto auto;text-align: center;">
               <div>
                   <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p5_button_press(3)">Add 1</button>
@@ -46,7 +53,40 @@
               </div>
 
             </div>
-              <br>
+            
+            <hr style="height: 3px;">
+
+            <p class="para">Hand-shake</p>
+            <p class="subPara">Start</p>
+            <div style="display: grid; grid-template-columns: auto auto auto;text-align: center;">
+
+                <div>
+                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(3)">SYN</button>
+                </div>
+                <div>
+                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 100px; padding: 10px" onclick="p5_button_press(4)">SYN+ACK</button>
+                </div>
+                <div>
+                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(4)">ACK</button>
+                </div>
+  
+            </div>
+
+            <p class="subPara">Close</p>
+            <div style="display: grid; grid-template-columns: auto auto auto;text-align: center;">
+
+                <div>
+                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(3)">FIN</button>
+                </div>
+                <div>
+                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 100px; padding: 10px" onclick="p5_button_press(4)">FIN+ACK</button>
+                </div>
+                <div>
+                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(4)">ACK</button>
+                </div>
+  
+            </div>
+
             </div>
             <div style="margin-left: 2%; border: 5px ridge white; padding: 5px; width: 280px; text-align: center;">
               <!-- for window -->
@@ -99,14 +139,12 @@
             </div>
 
           </div>
-        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 420px;">
-
-          <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
+        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 420px; margin-top: 10px;">
+            
+            <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
   
           </div>
-  
           <div id="canvas" style="width: 360px;">
-            
             </div>
         </div>
         <div id="status-box" style="flex: 1; left: 50%;">
@@ -137,4 +175,5 @@
 
   <script src="/src/js/main.js">
   </script>
+
 </html>

@@ -1099,6 +1099,13 @@ function get_window() {
       pkt_ack.push(document.getElementById(`pkt${i + 1}-ack`));
     }
   }
+
+  for (var i = 1; i <= p2_maxPkt; i++) {
+    if (i == window_start) pkt_head[i - 1].className = "window-start";
+    else if (i == window_end) pkt_head[i - 1].className = "window-end";
+    else if (i > window_start && i < window_end) pkt_head[i - 1].className = "window-inside";
+    else pkt_head[i - 1].className = "";
+  }
   
 }
 
