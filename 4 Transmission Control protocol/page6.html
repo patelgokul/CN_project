@@ -14,7 +14,7 @@
     />
     <link rel="stylesheet" href="/src/css/style1.css" />
 
-    <title>3 way handshake</title>
+    <title>TCP Closure</title>
   </head>
 
   <body class="body">
@@ -40,32 +40,34 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/page2.html">GBN-Sender</a>
+              <a class="nav-link" href="/page2.html">GBN-Sender</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" href="/page3.html">3-Way Handshake</a>
+              <a class="nav-link" href="/page3.html">3-Way Handshake</a>
             </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/page4.html">Slow-Start</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/page5.html">AIMD</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/page4.html">Slow-Start</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/page5.html">AIMD</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/page6.html">TCP Closure</a>
+            </li>
 
           </ul>
         </div>
       </div>
     </nav>
     <br >
-
     <div style="display: flex;">
         <div style="flex: 1; margin-left: 1%; text-align: center;">
             <!-- sender side -->
             <h3>Sender:</h3>
             <div class="p3-button-div">
-                <button id="S-SYN" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p3_button_press(0,0)">Send: SYN</button>
+                <button id="S-SYN" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p3_button_press(0,0)">Send: FIN</button>
               </div>
                 <br>
                 <div class="p3-button-div">
@@ -73,7 +75,7 @@
                 </div>
                 <br>
                 <div class="p3-button-div">
-                  <button id="S-SYNACK" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p3_button_press(0,1)">Send: SYN+ACK</button>
+                  <button id="S-SYNACK" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p3_button_press(0,1)">Send: FIN+ACK</button>
               </div>
         </div>
         <div style="flex: 1;">
@@ -91,18 +93,18 @@
             <br>
   
             <div id="Log-span" class="log-div">
-              <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
-          <div style="overflow-y: scroll; height:150px; background-color: rgb(160, 212, 255) !important;">
-            <ol id="log"></ol>
-          </div>
+                <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
+            <div style="overflow-y: scroll; height:150px; background-color: rgb(160, 212, 255) !important;">
+              <ol id="log"></ol>
             </div>
+              </div>
 
         </div>
         <div style="flex: 1;  text-align: center;">
             <!-- receiver side -->
             <h3>Receiver:</h3>
             <div class="p3-button-div">
-                <button id="R-SYN" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p3_button_press(1,0)">Send: SYN</button>
+                <button id="R-SYN" type="button" class="btn btn-grey btn3d"  style="width: 130px;" onclick="p3_button_press(1,0)">Send: FIN</button>
               </div>
                 <br>
                 <div class="p3-button-div">
@@ -110,7 +112,7 @@
                 </div>
                 <br>
                 <div class="p3-button-div">
-                  <button id="R-SYNACK" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p3_button_press(1,1)">Send: SYN+ACK</button>
+                  <button id="S-SYNACK" type="button" class="btn btn-blue btn3d" style="width: 130px;" onclick="p3_button_press(1,1)">Send: FIN+ACK</button>
               </div>
         </div>
         </div>
@@ -118,8 +120,6 @@
     </div>
   </body>
 
-
   <script src="/src/js/main.js">
-
   </script>
 </html>

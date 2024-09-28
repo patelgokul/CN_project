@@ -141,18 +141,18 @@ input {
 }
 
 .log-div{
-  overflow-y: hidden; 
-  height:150px; 
+  /* overflow-y: hidden;  */
+  height:180px; 
   background-color: rgb(160, 212, 255) !important;
-  padding-right: 14px;
+  /* padding-right: 14px; */
   
 }
 
-.log-div:hover{
+/* .log-div:hover{
   overflow-y: scroll;
   padding-right: 0;
   scrollbar-width: thin;
-}
+} */
 
 .p3-button-div{
   display: flex;
