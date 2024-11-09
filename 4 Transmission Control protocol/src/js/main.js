@@ -38,6 +38,8 @@ var p3_count = 0;
 var window_operations = [];
 var p5_window_size_trigger = 0; // for add 1 and div 2
 var p5_window_pos_trigger = 0; // for move window
+var p7_window_size_trigger = 0; // for add 1 and div 2
+var p7_window_pos_trigger = 0; // for move window
 
 /**
  * @param {number} win probability of getting 1
@@ -176,7 +178,7 @@ async function callAnimateRay(dir, success) {
   return await delay(900 + success * 800);
 }
 
-async function doublePkt(idx, send_len, ret_len, pn, an) {
+async function doublePkt(idx, send_len, ret_len, pkt_no, ack_no) {
 
 
   ack_reached = 0;
@@ -352,8 +354,8 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
     var t1 = document.createElement("h6");
     var t2 = document.createElement("h6");
 
-    var pn1 = document.createTextNode(pn);
-    var an2 = document.createTextNode(an);
+    var pn1 = document.createTextNode(pkt_no);
+    var an2 = document.createTextNode(ack_no);
 
     t1.style.width = "40px";
     t2.style.width = "40px";
@@ -424,6 +426,19 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
       pkt_head[i - 1].className = "";
       pkt_sent[i - 1].innerHTML = i <= max_pkt_sent ? "✔" : "";
     }
+  } else if(document.title == "TCP"){
+    if (p7_docTitle == "Slow-Start"){
+      for (var i = 1; i <= p7_maxPkt; i++) {
+        pkt_head[i - 1].className = "";
+        pkt_sent[i - 1].innerHTML = i <= max_pkt_sent ? "✔" : "";
+      }
+    }
+    else if (p7_docTitle == "AIMD"){
+      for (var i = 1; i <= p7_maxPkt; i++) {
+        pkt_head[i - 1].className = "";
+        pkt_sent[i - 1].innerHTML = i <= max_pkt_sent ? "✔" : "";
+      }
+    }
   }
 
   await delay(2000, 1);
@@ -460,6 +475,18 @@ async function doublePkt(idx, send_len, ret_len, pn, an) {
   } else if (document.title == "AIMD") {
     for (var i = 1; i <= p5_maxPkt; i++) {
     pkt_ack[i - 1].innerHTML = i <= last_ack_received ? "✔" : "";
+    }
+  } else if (document.title == "TCP") {
+    if (p7_docTitle == "Slow-Start"){
+      for (var i = 1; i <= p7_maxPkt; i++) {
+      pkt_ack[i - 1].innerHTML = i <= last_ack_sent ? "✔" : "";
+      // console.log(i,last_ack_received);
+      }
+    }
+    else if (p7_docTitle == "AIMD"){
+      for (var i = 1; i <= p7_maxPkt; i++) {
+        pkt_ack[i - 1].innerHTML = i <= last_ack_received ? "✔" : "";
+        }
     }
   }
 
@@ -538,7 +565,7 @@ async function callDblPkt(success, returnSuccess, resend_pkt_no = 0) {
         max_pkt_sent > last_pkt_sent ? max_pkt_sent : last_pkt_sent;
 
       // await delay(2000);
-      if(document.title == "GBN - Sender" || document.title == "AIMD") last_ack_received = last_ack_sent;
+      if(document.title == "GBN - Sender" || document.title == "AIMD" || p7_docTitle == "AIMD") last_ack_received = last_ack_sent;
       lar = last_ack_sent;
       await doublePkt(
         ray_counter,
@@ -578,7 +605,7 @@ async function callDblPkt(success, returnSuccess, resend_pkt_no = 0) {
 
     await doublePkt(ray_counter, length / 2, 0, ` pkt${last_pkt_sent}`, ` `);
   }
-  if(document.title != "GBN - Sender" && document.title != "AIMD") last_ack_received = lar;
+  if(document.title != "GBN - Sender" && !(document.title == "AIMD" || p7_docTitle == "AIMD")) last_ack_received = lar;
   return await delay(2000);
 }
 
@@ -725,17 +752,18 @@ async function p2_buttonPress(type) {
   }
 }
 
-async function p3_button_press(user, type) {
+async function p3_button_press(user, type, closure = 0) {
   if (sending) {
     logEntry("Invalid Button Press. Please wait.");
     return;
   }
 
+  const msg = closure ? "FIN" : "SYN";
   if (!p3_count) {
     if (!user && !type) {
       // send syn
       p3_count++;
-      logEntry("Sender: SYN sent");
+      logEntry(`Sender: ${msg} sent`);
       sending = 1;
       await callAnimateRay(1, 1);
       sending = 0;
@@ -746,7 +774,7 @@ async function p3_button_press(user, type) {
     if (user && type == 1) {
       // receiver - synack
       p3_count++;
-      logEntry("Receiver: SYN+ACK sent");
+      logEntry(`Receiver: ${msg}+ACK sent`);
       sending = 1;
       await callAnimateRay(0, 1);
       sending = 0;
@@ -1054,6 +1082,446 @@ async function p5_button_press(type){
   }
 }
 
+// var ph1_3whs = 0;
+// var ph2_slst = 0;
+// var ph3_aimd = 0;
+// var ph4_3whs = 0;
+// var phase = [0,-1,-1,-1]
+var curr_phase = 0;
+const p7_maxPkt = 20;
+var c_windowSize = 1;
+var p7_docTitle;
+var p7_closure = 0;
+// 1 - completed
+// 0 - started, not completed
+// -1 - not started
+var p7_aimd_windowSize = 8;
+
+window_start = 0;
+window_end = 0;
+
+async function p7_button_press(type) {
+  /* Enter in AIMD phase:
+  curr_phase = 2;
+  window_start = 8;
+  window_end = 15;
+  c_windowSize = 8;
+  last_ack_received = 7;
+  last_pkt_sent = 7;
+  last_ack_sent = 7;
+  p7_docTitle = "AIMD";
+   */
+
+  if(end_) return;
+  if (window_end == p7_maxPkt){
+    p7_window_pos_trigger = 0;
+    p7_window_size_trigger = 0;
+  }
+
+  if(curr_phase == 0){
+    // Handshake
+    // p7_closure:
+    // 0 - Start
+    // 1 - Close
+
+  const msg = p7_closure ? "FIN" : "SYN";
+
+    if(!p3_count){
+      if((type == 5 && !p7_closure ) || (type = 6 && p7_closure)){
+        // send SYN
+        p3_count++;
+        logEntry(`Sender: ${msg} sent`);
+        sending = 1;
+        // await callAnimateRay(1, 1);
+        await doublePkt(0,length,length,`${msg}`,`${msg}\n+\nACK`);
+        doublePkt(0,0,0,"","");
+        sending = 0;
+        // SYNACK
+        p3_count++;
+        logEntry(`Receiver: ${msg}+ACK sent`);
+        // sending = 1;
+        // // await callAnimateRay(0, 1);
+        // // await doublePkt(0,length/2,0,"","");
+        // sending = 0;
+      } 
+      else {
+        logEntry(`Invalid Operation`);
+      }
+    }
+    else if(p3_count == 2){
+      if(type == 7){
+        // send ACK/FIN
+        p3_count++;
+        logEntry("Sender: ACK sent");
+        sending = 1;
+        // await callAnimateRay(1, 1);
+        await doublePkt(0,length,0,"ACK","");
+        sending = 0;
+
+
+        if (!p7_closure){
+          curr_phase = 1;
+          p7_docTitle = "Slow-Start";
+          alert("Succesfull Handshake");
+          window_start = 1;
+          window_end = 1;
+        }
+        else {
+          end_ = 1;
+          alert("Succesfull Completion of TCP");
+        }
+
+      }
+      else {
+        logEntry(`Invalid Operation`);
+      }
+    }
+  }
+
+  else if (curr_phase == 1){
+    // Slow start
+    // move - 0
+    // send - 1
+    // incr - 2
+    p7_docTitle = "Slow-Start";
+
+    var c_type = -1;
+    if(type == 0){
+      // p4_button_press(1);
+      c_type = 1;
+    }
+    else if(type == 2){
+      // p4_button_press(0);
+      c_type = 0;
+    }
+    else if(type == 3){
+      // p4_button_press(2)
+      c_type = 2;
+    }
+
+    const c_maxPkt = 20;
+    if (c_type == 0) {
+      if (window_end <= c_maxPkt && last_ack_received >= window_start && ack_reached) {
+        window_start++;
+        window_end++;
+        if (window_end > c_maxPkt) {
+          window_end = c_maxPkt;
+          window_start = c_maxPkt - c_windowSize + 1;
+          logEntry("!!Window cannot be moved further!!");
+        } else logEntry(`New start of window - ${window_start}`);
+      } else {
+        logEntry("!!! Invalid move window !!!");
+      }
+    }
+  
+    // SEND NEXT PKT
+    else if (c_type == 1) {
+      if(window_end == c_maxPkt && last_pkt_sent < c_maxPkt){
+        callDblPkt(1,1);
+      } else if(last_pkt_sent >= c_maxPkt) {
+        logEntry("!!! No more packets to send !!!");
+      } else if(last_pkt_sent + 1 <= window_end && (!ack_reached || last_ack_received + 1 <= window_start)){
+          if(c_windowSize == 1 + last_ack_received) callDblPkt(1, 1);
+          else if (last_ack_sent <= window_end && c_windowSize == last_ack_received + 1) callDblPkt(1, 1);
+          else logEntry("!!!Please increase window size!!!");
+      } else if (last_pkt_sent + 1 > window_end) {
+        logEntry(`Sender: Window end reached, cannot send next pkt`);
+      } else if (last_ack_received >= window_start) {
+        logEntry(`ar ${ack_reached}`);
+        logEntry(`!!!Window start is already sent!!!`);
+      }
+    }
+  
+    // INCREASE WINDOW SIZE
+    else if (c_type == 2) {
+      if(window_end < c_maxPkt && (c_windowSize <= last_ack_received)){
+        window_end++;
+        c_windowSize++;
+      } else if(!(window_end < c_maxPkt)) logEntry("!!!Window size exceeeding limits!!!");
+      else logEntry("!!!Invalid increase in window size!!!");
+  
+    }
+    else{
+      logEntry("Invalid option");
+    }
+
+    if(c_windowSize >= 8){
+      curr_phase = 2;
+      p7_docTitle = "AIMD";
+      alert("Congestion window reached");
+    }
+
+  
+    logEntry(`${ray_counter} - s: ${window_start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
+
+    for (var i = 1; i <= c_maxPkt; i++) {
+      pkt_head[i - 1].className = "";
+      if (i == window_start) pkt_head[i - 1].className += "window-start ";
+      if (i == window_end) pkt_head[i - 1].className += "window-end ";
+      if (i > window_start && i < window_end) pkt_head[i - 1].className += "window-inside ";
+    }
+  
+  }
+
+  else if (curr_phase == 2){
+    // AIMD
+    // Move - 0
+    // send - 1
+    // resend - 2
+    // add - 3
+    // divide - 4
+
+    p7_docTitle == "AIMD";
+
+    var c_type = -1;
+    switch(type){
+      case 2: 
+        // p7_button_press(2)
+        c_type = 0;
+        break;
+      case 0:
+        // p7_button_press(0)
+        c_type = 1;
+        break;
+      case 1:
+        // p7_button_press(1)
+        c_type = 2;
+        break;
+      case 3:
+        // p7_button_press(3)
+        c_type = 3;
+        break;
+      case 4:
+        // p7_button_press(4)
+        c_type = 4;
+        break;
+    }
+
+    // MOVE WINDOW
+    if(c_type == 0){
+      if (window_end <= p7_maxPkt && last_ack_received >= window_start && p7_window_pos_trigger) {
+        window_start++;
+        window_end++;
+  
+        if (window_end > p7_maxPkt) {
+          // window_end = p7_maxPkt;
+          // window_start = p7_maxPkt - p7_windowSize + 1;
+          window_end -= 1;
+          window_start -= 1;
+          logEntry("!!Window cannot be moved further!!");
+        } else logEntry(`New start of window - ${window_start}`);
+      } else {
+        logEntry("!!! Invalid move window !!!");
+      }
+      console.log("outside 1289");
+      if(window_start > last_ack_received){
+        console.log("inside 1291");
+        p7_window_pos_trigger = 0;
+      }
+
+    }
+
+    // SEND NEW
+    else if(c_type == 1){
+
+      if (p7_window_size_trigger == 1){
+        logEntry("!!! Change window size !!!");
+      }
+      else if (p7_window_pos_trigger == 1){
+        logEntry("!!! Change window position !!!");
+      }
+      else if(last_pkt_sent >= p7_maxPkt) {
+        logEntry("!!! No more packets to send !!!");
+      } 
+      // else if (last_pkt_sent + 1 <= window_end && (!ack_reached || last_ack_received + 1 <= window_start) && !force_resend && !force_window_change){
+      else if (last_pkt_sent + 1 <= window_end && !force_resend && !force_window_change){
+        success = last_pkt_sent == 0 ? 1 : getRandom(0.6);
+        returnSuccess = getRandom(0.7);
+  
+        // // ensuring 1st 4 pkts are success
+        // if (last_pkt_sent < 5){
+        //   success = 1;
+        //   returnSuccess = 1;
+        // }
+  
+        if (!timer_call) {
+          timer_call++;
+          duration = time_out_duration;
+          intervalID = setInterval(countdown, 1000);
+        }
+  
+  
+        if (returnSuccess * success && last_ack_received == last_pkt_sent) {
+          // countdown(1);
+          clearInterval(intervalID);
+          timer_call = 0;
+          force_resend = false;
+          
+        }
+  
+  
+        callDblPkt(success, returnSuccess);
+  
+  
+        // A1, D2
+        // if (returnSuccess * success && (window_operations[0] == "D2" || window_operations.length == 0)){
+        
+        // logEntry(`Send New: win_end-${window_end} win_start-${window_start} ls-${last_pkt_sent} lar-${last_ack_received} s-${success} r-${returnSuccess}`);
+        // console.log(`Send New: win_end-${window_end} win_start-${window_start} ls-${last_pkt_sent} lar-${last_ack_received} s-${success} r-${returnSuccess}`);
+  
+        if (window_end ==  last_ack_received){
+          window_operations.push("A1");
+          p7_window_size_trigger = 1;
+          p7_window_pos_trigger = 1;
+          
+        }
+        else if (success*returnSuccess == 0) {
+          window_operations.push("D2");
+          p7_window_size_trigger = 1;
+          if(!(window_start == last_pkt_sent && window_start == last_ack_received + 1)){
+            p7_window_pos_trigger = 1;
+          }
+        }
+        console.log(window_operations);
+  
+        // await delay(3000);
+        // p5_window_op_trigger = 1;
+        
+        // callDblPkt(1, 1);
+      } 
+      else if (force_resend) {
+        logEntry(`!!!Previous pkts exceded waiting time - Use RESEND!!!`);
+      }
+      
+      else if (last_pkt_sent + 1 > window_end) {
+        logEntry(`Sender: Window end reached, cannot send next pkt`);
+      }
+      
+      // else if (last_ack_received >= window_start) {
+      //   logEntry(`ar ${ack_reached}`);
+      //   logEntry(`!!!Please move the window first!!!`);
+      // }
+  
+      else if(force_window_change) {
+        logEntry(`!!!Invalid window size - change window size`);
+      }
+    }
+
+    // RESEND
+    else if (c_type == 2){
+
+      if (p7_window_size_trigger == 1 ){
+        logEntry("!!! Change window size !!!");
+        
+      }
+      else if (p7_window_pos_trigger == 1){
+        logEntry("!!! Change window position !!!");
+      }
+  
+      else if (force_resend) {
+
+        var resend_input = document.getElementById("resend_pkt");
+        var resendPkt = Number(resend_input.value);
+        logEntry(`${resendPkt}`)
+
+        // Handling failure when window reaches end 
+        // if (window_end == p7_maxPkt)
+  
+        if ((resendPkt == last_ack_received + 1 && resendPkt <= max_pkt_sent && resendPkt >= window_start && resendPkt <= window_end) || (window_end == p7_maxPkt)) {
+          // console.log("here",resendPkt);
+          resend_input.value = `${resendPkt == 20 ? 20 : resendPkt + 1}`;
+          last_ack_received = resendPkt == 20 ? 20 : resendPkt;
+  
+          callDblPkt(1, 1, resendPkt);
+          if (resendPkt == max_pkt_sent) {
+            // allow send new
+            clearInterval(intervalID);
+            force_resend = false;
+            timer_call = 0;
+          }
+  
+          if (window_end ==  last_ack_received){
+            window_operations.push("A1");
+            p7_window_size_trigger = 1;
+            p7_window_pos_trigger = 1;
+            
+          }
+          console.log(window_operations);
+  
+        } else {
+          logEntry("!!!Invalid Pkt RESEND!!!");
+        }
+      } else if(!duration) {
+        logEntry("!!Invalid Pkt RESEND!!");
+      }
+        else {
+        logEntry("!!!Wait time-out!!!");
+      }
+      // await delay(3000);
+      // p5_window_op_trigger = 1;
+      
+    }
+
+    // ADD 1
+    else if(c_type == 3){
+      // if(start + p5_windowSize - 1 > p5_maxPkt){
+    //   logEntry("!!!Window size too large!!!");
+    // }
+    p7_window_size_trigger = 0;
+    if (window_operations[0] == "A1"){
+      window_operations.shift();
+      if(window_end < p7_maxPkt && (p7_aimd_windowSize <= last_ack_received)){
+        window_end++;
+        p7_aimd_windowSize++;
+      } else if(!(window_end < p7_maxPkt)) logEntry("!!!Window size exceeeding limits!!!");
+      else logEntry("!!!Invalid increase in window size!!!");
+      
+    }
+    else logEntry("!!!Invalid increase in window size!!!");
+    }
+
+    // DIVIDE BY 2
+    else if (c_type == 4){
+      // if(end < p5_maxPkt && (p5_windowSize <= last_ack_received)){
+    //   p5_windowSize /= 2;
+      // window_end = start + p5_windowSize - 1;
+    // } else if(!(end < p5_maxPkt)) logEntry("!!!Window size exceeeding limits!!!");
+    // else logEntry("!!!Invalid increase in window size!!!");
+
+    p7_window_size_trigger = 0;
+    if (window_operations[0] == "D2"){
+      window_operations.shift();
+      p7_aimd_windowSize = Math.ceil(p7_aimd_windowSize/2);
+      window_end = window_start + p7_aimd_windowSize - 1;
+
+        
+    }
+    else logEntry("!!!Invalid decrease in window size!!!");
+    }
+
+
+
+
+    logEntry(`${ray_counter} - s: ${window_start}; ls: ${last_pkt_sent}; lar: ${last_ack_received};`);
+
+
+    for (var i = 1; i <= p7_maxPkt; i++) {
+      pkt_head[i - 1].className = "";
+      if (i == window_start) pkt_head[i - 1].className += "window-start ";
+      if (i > window_start && i < window_end) pkt_head[i - 1].className += "window-inside ";
+      if (i == window_end) pkt_head[i - 1].className += "window-end ";
+    }
+  
+    if(last_ack_received == p7_maxPkt){
+      p7_closure = 1;
+      curr_phase = 0;
+      await delay(4500);
+      alert("Close the TCP connection");
+    }
+  }
+
+}
+
 function countdown() {
   duration = duration ? --duration : 0;
   force_resend = !duration;
@@ -1099,12 +1567,21 @@ function get_window() {
       pkt_ack.push(document.getElementById(`pkt${i + 1}-ack`));
     }
   }
+  else if(document.title == "TCP"){
+    window_end = window_start;
+    for (var i = 0; i < p7_maxPkt; i++) {
+      pkt_head.push(document.getElementById(`pkt${i + 1}-head`));
+      pkt_sent.push(document.getElementById(`pkt${i + 1}-sent`));
+      pkt_ack.push(document.getElementById(`pkt${i + 1}-ack`));
+    }
+  }
+
 
   for (var i = 1; i <= p2_maxPkt; i++) {
-    if (i == window_start) pkt_head[i - 1].className = "window-start";
-    else if (i == window_end) pkt_head[i - 1].className = "window-end";
-    else if (i > window_start && i < window_end) pkt_head[i - 1].className = "window-inside";
-    else pkt_head[i - 1].className = "";
+    if (i == window_start) pkt_head[i - 1].className += "window-start ";
+    if (i == window_end) pkt_head[i - 1].className += "window-end ";
+    if (i > window_start && i < window_end) pkt_head[i - 1].className += "window-inside ";
+    else pkt_head[i - 1].className += "";
   }
   
 }

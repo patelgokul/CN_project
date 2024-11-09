@@ -14,12 +14,13 @@
     />
     <link rel="stylesheet" href="/src/css/style1.css" />
 
-    <title>AIMD</title>
+    <title>TCP</title>
   </head>
 
   <body class="body">
     <script src="/src/js/nav.js" id="navbar-7"></script>
     <div style="display: flex;">
+      <!-- buttons tray -->
           <div>
             
             
@@ -28,68 +29,56 @@
 
             <div style="display: grid; grid-template-columns: auto auto;text-align: center;">
                   <div style="text-align: center;">
-                    <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 100px" onclick="p5_button_press(1)">Send New</button>
+                    <button id="send_next" type="button" class="btn btn-green btn3d" style="width: 100px" onclick="p7_button_press(0)">Send New</button>
                   </div>
                   
                   <div style="flex-direction: row; text-align: center">
-                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p5_button_press(2)">Re-Send</button>
-                    <input type="number" id="resend_pkt" min="1" max="10" value="1" style=" width: 30px;">
+                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p7_button_press(1)">Re-Send</button>
+                    <input type="number" id="resend_pkt" min="1" max="20" value="1" style=" width: 50px;">
                 </div>
             </div>
 
             <hr style="height: 3px;">
             <p class="para">Window Control</p>
-            <div style="text-align: center;">
+            <!-- <div style="text-align: center;">
                 <button id="move_window" type="button" class="btn btn-grey btn3d"  style="width: 130px" onclick="p5_button_press(0)">Move Window</button>
-              </div>
+              </div> -->
             <div style="margin: 2% ; flex-direction: column; justify-content:center; width: 300px !important;">
-              <p class="subPara">Window Size</p>
-            <div style="display: grid; grid-template-columns: auto auto;text-align: center;">
+              <!-- <p class="subPara">Window Size</p> -->
+            <div style="display: grid; grid-template-columns: auto auto auto;text-align: center;">
               <div>
-                  <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p5_button_press(3)">Add 1</button>
+                  <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p7_button_press(2)">Move Window</button>
               </div>
               <div>
-                  <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 100px;" onclick="p5_button_press(4)">Divide 2</button>
+                  <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 100px;" onclick="p7_button_press(3)">Increase size by 1</button>
               </div>
+              <div>
+                  <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 100px;" onclick="p7_button_press(4)">Divide Size by 2</button>
+              </div>
+              
 
             </div>
             
             <hr style="height: 3px;">
 
             <p class="para">Hand-shake</p>
-            <p class="subPara">Start</p>
             <div style="display: grid; grid-template-columns: auto auto auto;text-align: center;">
-
+              
                 <div>
-                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(3)">SYN</button>
+                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 50px; padding: 10px" onclick="p7_button_press(5)">SYN</button>
                 </div>
                 <div>
-                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 100px; padding: 10px" onclick="p5_button_press(4)">SYN+ACK</button>
+                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 50px; padding: 10px" onclick="p7_button_press(6)">FIN</button>
                 </div>
                 <div>
-                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(4)">ACK</button>
-                </div>
-  
-            </div>
-
-            <p class="subPara">Close</p>
-            <div style="display: grid; grid-template-columns: auto auto auto;text-align: center;">
-
-                <div>
-                    <button id="resend" type="button" class="btn btn-blue btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(3)">FIN</button>
-                </div>
-                <div>
-                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 100px; padding: 10px" onclick="p5_button_press(4)">FIN+ACK</button>
-                </div>
-                <div>
-                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 50px; padding: 10px" onclick="p5_button_press(4)">ACK</button>
+                    <button id="resend" type="button" class="btn btn-purple btn3d" style="width: 50px; padding: 10px" onclick="p7_button_press(7)">ACK</button>
                 </div>
   
             </div>
 
             </div>
-            <div style="margin-left: 2%; border: 5px ridge white; padding: 5px; width: 280px; text-align: center;">
-              <!-- for window -->
+            <!-- <div style="margin-left: 2%; border: 5px ridge white; padding: 5px; width: 600px; text-align: center;">
+              
               <b>Current Window:</b>
 
               <br>
@@ -107,6 +96,16 @@
                   <th id="pkt8-head">8</th>
                   <th id="pkt9-head">9</th>
                   <th id="pkt10-head">10</th>
+                  <th id="pkt11-head">11</th>
+                  <th id="pkt12-head">12</th>
+                  <th id="pkt13-head">13</th>
+                  <th id="pkt14-head">14</th>
+                  <th id="pkt15-head">15</th>
+                  <th id="pkt16-head">16</th>
+                  <th id="pkt17-head">17</th>
+                  <th id="pkt18-head">18</th>
+                  <th id="pkt19-head">19</th>
+                  <th id="pkt20-head">20</th>
                 </tr>
                 <tr>
                     <td>Sent</td>
@@ -120,6 +119,16 @@
                     <td id="pkt8-sent"></td>
                     <td id="pkt9-sent"></td>
                     <td id="pkt10-sent"></td>
+                    <td id="pkt11-sent"></td>
+                    <td id="pkt12-sent"></td>
+                    <td id="pkt13-sent"></td>
+                    <td id="pkt14-sent"></td>
+                    <td id="pkt15-sent"></td>
+                    <td id="pkt16-sent"></td>
+                    <td id="pkt17-sent"></td>
+                    <td id="pkt18-sent"></td>
+                    <td id="pkt19-sent"></td>
+                    <td id="pkt20-sent"></td>
                 </tr>
                 <tr>
                     <td>ACK</td>
@@ -133,19 +142,31 @@
                     <td id="pkt8-ack"></td>
                     <td id="pkt9-ack"></td>
                     <td id="pkt10-ack"></td>
+                    <td id="pkt11-ack"></td>
+                    <td id="pkt12-ack"></td>
+                    <td id="pkt13-ack"></td>
+                    <td id="pkt14-ack"></td>
+                    <td id="pkt15-ack"></td>
+                    <td id="pkt16-ack"></td>
+                    <td id="pkt17-ack"></td>
+                    <td id="pkt18-ack"></td>
+                    <td id="pkt19-ack"></td>
+                    <td id="pkt20-ack"></td>
                 </tr>
               </table>
     
-            </div>
+            </div> -->
 
           </div>
-        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 420px; margin-top: 10px;">
+      <!-- ray digram canvas -->
+        <div style="display: grid; grid-template-columns: 1fr 10fr; width: 420px; overflow-y:scroll; scrollbar-gutter: stable; height: 350px; margin-top: 10px; margin-left: 30px;">
             
-            <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
+          <div id="ray-name" style="flex: 1; display: flex; flex-direction: column;">
   
           </div>
           <div id="canvas" style="width: 360px;">
-            </div>
+
+          </div>
         </div>
         <div id="status-box" style="flex: 1; left: 50%;">
           <div id="timer" style="width: 450px; height: 30px; font-size: 25px; margin-bottom: 5px; font-family: 'Source Code Pro'; text-align: center;">
@@ -155,7 +176,7 @@
 
           <div id="Log-span" style=" width: 450px; ">
             <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
-            <div style="overflow-y: scroll; height:361px; background-color: rgb(160, 212, 255) !important;">
+            <div style="overflow-y: scroll; height:301px; background-color: rgb(160, 212, 255) !important;">
               <ol id="log"></ol>
             </div>
           </div>
@@ -170,7 +191,90 @@
         </div> -->
         
     </div>
-    <br><br>
+    <div style="display: grid; grid-template-columns: auto;text-align: center; align-items: center;">
+      <div style="margin:auto; border: 5px ridge white; padding: 5px; width: 600px; text-align: center;">
+      <!-- <div style="margin-left: 2%; border: 5px ridge white; padding: 5px; width: 600px; text-align: center;"> -->
+              
+        <b>Current Window:</b>
+  
+        <br>
+        <br>
+        <table>
+          <tr>
+            <th>Pkt</th>
+            <th id="pkt1-head">1</th>
+            <th id="pkt2-head">2</th>
+            <th id="pkt3-head">3</th>
+            <th id="pkt4-head">4</th>
+            <th id="pkt5-head">5</th>
+            <th id="pkt6-head">6</th>
+            <th id="pkt7-head">7</th>
+            <th id="pkt8-head">8</th>
+            <th id="pkt9-head">9</th>
+            <th id="pkt10-head">10</th>
+            <th id="pkt11-head">11</th>
+            <th id="pkt12-head">12</th>
+            <th id="pkt13-head">13</th>
+            <th id="pkt14-head">14</th>
+            <th id="pkt15-head">15</th>
+            <th id="pkt16-head">16</th>
+            <th id="pkt17-head">17</th>
+            <th id="pkt18-head">18</th>
+            <th id="pkt19-head">19</th>
+            <th id="pkt20-head">20</th>
+          </tr>
+          <tr>
+              <td>Sent</td>
+              <td id="pkt1-sent"></td>
+              <td id="pkt2-sent"></td>
+              <td id="pkt3-sent"></td>
+              <td id="pkt4-sent"></td>
+              <td id="pkt5-sent"></td>
+              <td id="pkt6-sent"></td>
+              <td id="pkt7-sent"></td>
+              <td id="pkt8-sent"></td>
+              <td id="pkt9-sent"></td>
+              <td id="pkt10-sent"></td>
+              <td id="pkt11-sent"></td>
+              <td id="pkt12-sent"></td>
+              <td id="pkt13-sent"></td>
+              <td id="pkt14-sent"></td>
+              <td id="pkt15-sent"></td>
+              <td id="pkt16-sent"></td>
+              <td id="pkt17-sent"></td>
+              <td id="pkt18-sent"></td>
+              <td id="pkt19-sent"></td>
+              <td id="pkt20-sent"></td>
+          </tr>
+          <tr>
+              <td>ACK</td>
+              <td id="pkt1-ack"></td>
+              <td id="pkt2-ack"></td>
+              <td id="pkt3-ack"></td>
+              <td id="pkt4-ack"></td>
+              <td id="pkt5-ack"></td>
+              <td id="pkt6-ack"></td>
+              <td id="pkt7-ack"></td>
+              <td id="pkt8-ack"></td>
+              <td id="pkt9-ack"></td>
+              <td id="pkt10-ack"></td>
+              <td id="pkt11-ack"></td>
+              <td id="pkt12-ack"></td>
+              <td id="pkt13-ack"></td>
+              <td id="pkt14-ack"></td>
+              <td id="pkt15-ack"></td>
+              <td id="pkt16-ack"></td>
+              <td id="pkt17-ack"></td>
+              <td id="pkt18-ack"></td>
+              <td id="pkt19-ack"></td>
+              <td id="pkt20-ack"></td>
+          </tr>
+        </table>
+  
+      </div>
+    </div>
+    
+    <!-- <br><br> -->
   </body>
 
   <script src="/src/js/main.js">
