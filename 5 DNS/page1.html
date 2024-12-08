@@ -17,16 +17,17 @@
 </head>
 <body>
     <script src="/src/js/nav.js" id="navbar-1"></script>
-    <div class="button-container" style="padding: 4px;">
-      <button class="button" onclick="p1_taskSelector(this, 1)">Task 1</button>
+    <!-- class="btn-group btn-group-toggle" data-toggle="buttons" -->
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="padding: 4px;display: flex;align-items: center;align-content: center;justify-content: center;flex-wrap: nowrap;">
+      <button class="button button-leftEnd" onclick="p1_taskSelector(this, 1)">Task 1</button>
       <button class="button" onclick="p1_taskSelector(this, 2)">Task 2</button>
       <button class="button" onclick="p1_taskSelector(this, 3)">Task 3</button>
       <button class="button" onclick="p1_taskSelector(this, 4)">Task 4</button>
-      <button class="button" onclick="p1_taskSelector(this, 5)">Task 5</button>
+      <button class="button button-rightEnd" onclick="p1_taskSelector(this, 5)">Task 5</button>
     </div>
-    <div style="display: flex">
+    <div style="display: flex; height: fit-content;">
         <div id="network"></div>
-        <div id="status-box" style="flex: 1; left: 50%; ; padding-top: 5%; padding-right: 2%;">
+        <div id="status-box" style="flex: 1; left: 50%; ; padding-top: 1%; padding-right: 1%; height: fit-content;">
             <div id="Log-span" style=" width: 450px; ">
               <h5 style="text-align: center; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgb(160, 212, 255) !important; margin: 0;">Communication log: </h5>
               <div style="overflow-y: scroll; height:396px; background-color: rgb(160, 212, 255) !important;">
@@ -38,19 +39,5 @@
 
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="src/js/main.js"></script>
-    <script>
-        function p1_taskSelector(clickedButton, task_no) {
-        const buttons = document.querySelectorAll('.button');
-        buttons.forEach(button => button.classList.remove('depressed'));
-          
-        clickedButton.classList.add('depressed');
-
-        buttons.forEach(button => {
-          button.classList.add('disabled'); 
-          button.disabled = true;
-        });
-        page1(task_no, buttons);
-        }
-    </script>
 </body>
 </html>
