@@ -64,25 +64,23 @@ function p1_taskSelector(clickedButton, task_no) {
 }
 
 function p1_get_correctOrder(task_no){
-    var order, mapping; // the value of second click when IP is found
+    var order;
     switch(task_no){
-        case 1:
+        case 2:
             order = [
                 [1, 2],
                 [2, 1]
             ]
-            mapping = 2
             break;
-        case 2:
+        case 3:
             order = [
                 [1, 2],
                 [2, 3],
                 [3, 2],
                 [2, 1]
             ]
-            mapping = 3
             break;
-        case 3:
+        case 4:
             order = [
                 [1, 2],
                 [2, 3],
@@ -91,9 +89,8 @@ function p1_get_correctOrder(task_no){
                 [3, 2],
                 [2, 1]
             ]
-            mapping = 4
             break;
-        case 4:
+        case 5:
             order = [
                 [1, 2],
                 [2, 3],
@@ -104,13 +101,12 @@ function p1_get_correctOrder(task_no){
                 [3, 2],
                 [2, 1]
             ]
-            mapping = 5
             break;
-        case 5:
-            var n = Math.floor(Math.random() * 4) + 1;
+        case 0:
+            var n = Math.floor(Math.random() * 4) + 2;
             return p1_get_correctOrder(n);
         }
-        return [order, mapping]
+        return [order, task_no]
 }
 
 function page1(task_no, btns){
@@ -128,8 +124,8 @@ function page1(task_no, btns){
     ]);
 
     // Show Server with IP
-    if (task_no < 5){
-        ip_server = nodes.get(task_no+1);
+    if (task_no > 0){
+        ip_server = nodes.get(task_no);
         ip_server.image = "src/img/IP_server.svg";
     }
     // Define edges (initially empty)
@@ -147,6 +143,7 @@ function page1(task_no, btns){
     // Create the network
     network = new vis.Network(container, data, options);
 
+    
     [page01Order, find_mapping] = p1_get_correctOrder(task_no)
     var mode = 1
 
@@ -219,10 +216,7 @@ function page1(task_no, btns){
                     logEntry("Wrong Query")
                     
                 }
-                setTimeout(() => {
-                    network.selectNodes([]);
-                }, 1000); 
-
+                setTimeout(() => network.selectNodes([]), 1000); 
                 firstClick = null;
             }
 
