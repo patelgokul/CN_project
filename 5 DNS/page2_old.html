@@ -17,7 +17,7 @@
 </head>
 <body>
     <script src="/src/js/nav.js" id="navbar-2"></script>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="padding: 4px;display: flex;align-items: center;align-content: center;justify-content: center;flex-wrap: nowrap; height: 50px">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="padding: 4px;display: flex;align-items: center;align-content: center;justify-content: center;flex-wrap: nowrap; height: 1px">
         <button class="task-button button button-leftEnd" onclick="p2_taskSelector(this, 2)">Task 1</button>
         <button class="task-button button" onclick="p2_taskSelector(this, 3)">Task 2</button>
         <button class="task-button button" onclick="p2_taskSelector(this, 4)">Task 3</button>
@@ -27,10 +27,10 @@
     <div style="display: grid; grid-template-columns: 3fr 1fr; height: 300px;">
         <div id="network" style="user-select: text;"></div>
         <div id="status-box" style="flex: 1; left: 50%; padding-top: 10px; padding-right: 10px;">
-            <!-- <div id="reply-box" style="background-color: rgb(240, 240, 240); padding: 5px; border-radius: 5px; margin-bottom: 5px; width: 400px; ">
+            <div id="reply-box" style="background-color: rgb(240, 240, 240); padding: 5px; border-radius: 5px; margin-bottom: 5px; width: 400px; ">
                 <h5>Reply to Host:</h5>
                 <div id="reply-content" style="min-height: 50px; ">
-                     This is where the reply from the backend will be displayed
+                    <!-- This is where the reply from the backend will be displayed -->
                      <div>
                         <h6>IP: <span id="return-ip"></span></h6>
                         <div style="display: grid; grid-template-columns: 4fr 5fr ;">
@@ -39,13 +39,13 @@
                         </div>
                      </div>
                 </div>
-            </div> -->
+            </div>
             <div>
+
                 <div id="input-box" style="background-color: rgb(240, 240, 240); padding: 5px; border-radius: 5px;  width: 400px; margin-bottom: 10px;">
                     <h5>Input Host Query:</h5>
-                    <h6 style="white-space: pre;">Queried hostname:    <span style="font-family: monospace;">gaia.cs.umass.edu</span></h6>
-                    <div style="display: grid; grid-template-columns: repeat(3,1fr); column-gap: 20px;">
-
+    
+                    <div style="display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(1, 1fr); row-gap: 3px; column-gap: 20px;">
                             <h6>Type:</h6>
                             <button id="btn1" class="button button2 st1" style="height: 30px; padding: 0%; width: 60px;" onclick="p2_buttonPress(1)">Query</button>
                             <button id="btn2" class="button button2 st1" style="height: 30px; padding: 0%; width: 60px" onclick="p2_buttonPress(2)">Reply</button>
@@ -58,10 +58,8 @@
                     </div>
                 </div>
                 <div id="Log-span" style=" width: 400px; ">
-                    <h5 style="text-align: center; border-top-right-radius: 5px; border-top-left-radius: 5px; background-color: rgb(160, 212, 255) !important; margin: 0;">DNS Reply Messages: </h5>
-                    <div style="overflow-y: scroll; height:250px; background-color: rgb(160, 212, 255) !important; border-bottom-left-radius: 5px;">
-                      <ul style="text-align: center; margin: 0">Record details:</ul>
-                      <ul style="font-family: monospace;">(Name, Value, Type) [Auth_DNS_flag]</ul>
+                    <h5 style="text-align: center; border-top-right-radius: 5px; border-top-left-radius: 5px; background-color: rgb(160, 212, 255) !important; margin: 0;">Log: </h5>
+                    <div style="overflow-y: scroll; height:180px; background-color: rgb(160, 212, 255) !important; border-bottom-left-radius: 5px;">
                       <ol id="log"></ol>
                     </div>
                   </div>
@@ -69,8 +67,7 @@
         </div>
     </div>
 
-    <!-- <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script> -->
-    <script src="src/js/vis-network.min.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="src/js/main.js"></script>
 </body>
 </html>

@@ -1,38 +1,40 @@
 var end_ = 0
+var network;
+var edges;
+var nodes;
+var data;
 
-
-const ip_to_id = {
+const ip_to_nodeID = {
     '62.181.145.11' : 1,
     '9.2.12.8' : 2,
     '122.215.230.181' : 3,
     '154.113.230.216' : 4,
     '8.8.8.8' : 5,
+    '16.1.0.8' : 0
 }
-
-// const ip_to_id = {
-//     '1' : 1,
-//     '2' : 2,
-//     '3' : 3,
-//     '4' : 4,
-//     '5' : 5,
-// }
-
-var network;
-var edges;
-var nodes;
-var data;
-const node_labels = {
+const node_name = {
     1 : 'Requesting Host',
     2 : 'Local DNS Server',
     3 : 'Root DNS Server',
     4 : 'TLD DNS Server',
     5 : 'Authoritative DNS Server',
+    0 : ''
 }
-const next_ip = {
-    2 : '122.215.230.181',
-    3 : '154.113.230.216',
-    4 : '8.8.8.8',
-    5 : '10.8.10.8',
+const node_ip = {
+    1 : '62.181.145.11',
+    2 : '9.2.12.8',
+    3 : '122.215.230.181',
+    4 : '154.113.230.216',
+    5 : '8.8.8.8',
+    0 : "16.1.0.8",
+}
+const node_hostname ={
+    1 : 'cse.nyu.edu',
+    2 : 'dns.nyu.edu',
+    3 : 'h.root-servers.net',
+    4 : 'k.edu-servers.net',
+    5 : 'dns.umass.edu',
+    0 : 'gaia.cs.umass.edu'
 }
 
 
@@ -241,7 +243,7 @@ function page1(task_no, btns){
 var task_btns;
 var p2_idx = 0;
 var p2_task_target = 1;
-const p2_target_ip = "10.8.10.8";
+const p2_target_ip = node_ip[0];
 // idx - tar
 // 0 - 2
 // 2 - 3
@@ -274,16 +276,17 @@ function page2(task_no, btns, is_rand = 0){
     task_btns = btns;
     p2_task_target = task_no;
     clearLogEntry();
-    p2_updateReply("",false);
 
     const container = document.getElementById('network');
     
     nodes = new vis.DataSet([
-        { id: 1, label: 'Requesting Host\n62.181.145.11', x: -150, y: 150, shape: "image", image: "src/img/host.svg", },
-        { id: 2, label: 'Local DNS Server\n9.2.12.8', x: -150, y: 0, shape: "image", image:"src/img/server.svg"},
-        { id: 3, label: 'Root DNS Server', x: 150, y: -150, shape: "image", image:"src/img/server.svg" },
-        { id: 4, label: 'TLD DNS Server', x: 150, y: 0, shape: "image", image:"src/img/server.svg" },
-        { id: 5, label: 'Authoritative DNS Server', x: 150, y: 150, shape: "image", image:"src/img/server.svg" },
+        { id: 0, label: 'gaia.cs.umass.edu\n16.1.0.8', x: 150, y: 100, shape: "image", image: "src/img/Target.svg", },
+        { id: 1, label: 'Requesting Host\ncse.nyu.edu\n62.181.145.11', x: -150, y: 100, shape: "image", image: "src/img/host.svg", },
+        { id: 2, label: 'Local DNS Server\ndns.nyu.edu\n9.2.12.8', x: -200, y: -50, shape: "image", image:"src/img/server.svg"},
+        { id: 3, label: 'Root DNS Server\nh.root-servers.net', x: 0, y: -200, shape: "image", image:"src/img/server.svg" },
+        { id: 4, label: 'TLD DNS Server\nk.edu-servers.net', x: 100, y: -100, shape: "image", image:"src/img/server.svg" },
+        { id: 5, label: 'Authoritative DNS Server\ndns.umass.edu', x: 150, y: 0, shape: "image", image:"src/img/server.svg" },
+        
     ]);
 
     // Show Server with IP
@@ -310,7 +313,7 @@ function page2(task_no, btns, is_rand = 0){
 }
 
 function p2_buttonPress(n){
-    if(end_) return;
+    // if(end_) return;
     if(n == 0){
         // Submit
         var inp = document.getElementById('user-input');
@@ -339,20 +342,42 @@ function p2_buttonPress(n){
 }
 
 function p2_send(ip){
-    const target_id = ip_to_id[ip]
+    const curr_queried_node_id = ip_to_nodeID[ip]
     if(ip == p2_target_ip){
-        end_ = 1;
-        setTimeout(() => alert("Task completed !!!"), 1000);
-        return;
-    }
-    if (ip in ip_to_id){
-        if (target_id == 1){
-            logEntry("Error: Self IP");
-        }
-        else if((target_id - 2)*2 == p2_idx) {
+        // coming here by proper querying
+        if (end_){
+            task_btns.forEach(button => {
+                button.classList.remove('disabled'); 
+                button.disabled = false;
+            });
+            // end_ = 0;
             edges.add({
                 from: 1,
-                to: target_id,
+                to: 0,
+                arrows: 'to',
+                label: `${++p2_idx}`,
+                smooth: {
+                    type: 'curvedCCW',
+                    roundness: 0.2
+                },
+                color: { color: '#00FF00' },
+            })
+            p2_idx = 0;
+            
+            // setTimeout(() => alert("Task completed !!!"),300);
+            setTimeout(() => alert("Task completed !!!"), 1000);
+            return;
+            
+        }
+    }
+    if (ip in ip_to_nodeID){
+        if (curr_queried_node_id == 1){
+            logEntry("Error: Self IP");
+        }
+        else if((curr_queried_node_id - 2)*2 == p2_idx) {
+            edges.add({
+                from: 1,
+                to: curr_queried_node_id,
                 arrows: 'to',
                 label: `${++p2_idx}`,
                 smooth: {
@@ -362,11 +387,11 @@ function p2_send(ip){
                 color: { color: '#00FF00' },
             });
             
-            logEntry(`Query sent from Host to ${node_labels[target_id]}`);
+            // logEntry(`Query sent from Host to ${node_labels[target_id]}`);
 
             setTimeout(() => {
                 edges.add({
-                    from: target_id,
+                    from: curr_queried_node_id,
                     to: 1,
                     arrows: 'to',
                     label: `${++p2_idx}`,
@@ -376,80 +401,103 @@ function p2_send(ip){
                     },
                     color: { color: '#00FF00' },
                 })
-                logEntry(`Response received from ${node_labels[target_id]} - ${next_ip[target_id]}`);
-
-                p2_updateReply(target_id == p2_task_target ? p2_target_ip : next_ip[target_id], target_id==5 ? "True": "False");
-
-                if(target_id < p2_task_target){
+                // logEntry(`Response received from ${node_name[curr_queried_node_id]} - ${node_ip[curr_queried_node_id + 1]}`);
+                
+                // p2_updateReply(curr_queried_node_id == p2_task_target ? p2_target_ip : next_ip[curr_queried_node_id], curr_queried_node_id==5 ? "True": "False");
+                
+                if(curr_queried_node_id < p2_task_target){
                     nodes.update({
-                        id: target_id+1, 
-                        label:`${node_labels[target_id+1]}\n${next_ip[target_id]}`
+                        id: curr_queried_node_id+1, 
+                        label:`${node_name[curr_queried_node_id+1]}\n${node_hostname[curr_queried_node_id+1]}\n${node_ip[curr_queried_node_id+1]}`
                     });
+                    // NS record
+                    logEntry(`(${node_hostname[0]}, ${node_hostname[curr_queried_node_id+1]}, ${'NS'}) [${Number(curr_queried_node_id == 5)}]`)
+                    // logEntry(`(${node_hostname[curr_queried_node_id]}, ${node_hostname[curr_queried_node_id+1]}, ${'NS'}) [${Number(curr_queried_node_id == 5)}]`)
+                    // A record
+                    logEntry(`(${node_hostname[curr_queried_node_id+1]}, ${node_ip[curr_queried_node_id+1]}, ${'A'}) [${Number(curr_queried_node_id == 5)}]`)
                 }
                 else{
                     end_ = 1;
+                    // A record
+                    logEntry(`(${node_hostname[0]}, ${node_ip[0]}, ${'A'}) [${Number(curr_queried_node_id == 5)}]`)
+
                 }
 
-                if (end_){
-                    task_btns.forEach(button => {
-                        button.classList.remove('disabled'); 
-                        button.disabled = false;
-                    });
-                    // end_ = 0;
-                    p2_idx = 0;
+                // if (end_){
+                //     task_btns.forEach(button => {
+                //         button.classList.remove('disabled'); 
+                //         button.disabled = false;
+                //     });
+                //     // end_ = 0;
+                //     p2_idx = 0;
                     
-                    setTimeout(() => alert("Task completed !!!"),300);
+                //     setTimeout(() => alert("Task completed !!!"),300);
                     
-                }
+                // }
 
             }, 2000);
 
         }
         else{
-            logEntry("Error: Wrong IP");
-            var delID = edges.add({
-                id: "to-be-deleted",
-                from: 1,
-                to: target_id,
-                arrows: 'to',
-                color: { color: '#FF0000' }, // Red for incorrect
-            })[0];
-            setTimeout(() => {
-                edges.remove("to-be-deleted");
-            }, 1000);
+            logEntry(curr_queried_node_id ? "Error: Wrong IP" : "Error: Incorrect Method" );
+            // var delID = edges.add({
+            //     id: "to-be-deleted",
+            //     from: 1,
+            //     to: curr_queried_node_id,
+            //     arrows: 'to',
+            //     color: { color: '#FF0000' }, // Red for incorrect
+            // })[0];
+            // setTimeout(() => {
+            //     edges.remove("to-be-deleted");
+            // }, 1000);
         }
     }
     else{
         logEntry("Error: Incorrect IP Address");
     }
 
-    if(target_id == p2_task_target){
+    if(curr_queried_node_id == p2_task_target){
         end_ = 1;
     }
 
 }
 
-function p2_updateReply(ip, auth){
-    var ip_txt = document.getElementById('return-ip');
-    var auth_btn = document.getElementById('return-auth');
-    var reply_txt = document.getElementById('reply-type-txt');
-    var reply_btn = document.getElementById('reply-type-btn');
+function p2_updateReply(hostname, ip_or_authDNS, type, auth_flag){
+    // var ip_txt = document.getElementById('return-ip');
+    // var auth_btn = document.getElementById('return-auth');
+    // var reply_txt = document.getElementById('reply-type-txt');
+    // var reply_btn = document.getElementById('reply-type-btn');
     
-    if(ip != '') reply_btn.classList.add('depressed');
-    if(auth == 'True') auth_btn.classList.add('depressed');
-    setTimeout(() => {
-        if(ip != '') reply_btn.classList.remove('depressed');
-        if(auth == 'True') auth_btn.classList.remove('depressed');
-    }, 500);
+    // if(ip != '') reply_btn.classList.add('depressed');
+    // if(auth == 'True') auth_btn.classList.add('depressed');
+    // setTimeout(() => {
+    //     if(ip != '') reply_btn.classList.remove('depressed');
+    //     if(auth == 'True') auth_btn.classList.remove('depressed');
+    // }, 500);
     
-    ip_txt.textContent = ip;
-    auth_btn.textContent = auth;
-    if(ip == '')
-            reply_txt.textContent = '';
-    else
-        reply_txt.textContent = ip == p2_target_ip ? 'A' : 'NS';
+    // ip_txt.textContent = ip;
+    // auth_btn.textContent = auth;
+    // if(ip == '')
+    //         reply_txt.textContent = '';
+    // else
+    //     reply_txt.textContent = ip == p2_target_ip ? 'A' : 'NS';
+
+
+    /**
+     * 1. Hostname queried
+     * 2. IP of 1.
+     * 3. Type A
+     * 
+     * 1. Hostname queried
+     * 2. auth dns server for 1.
+     * 3. Type NS
+     */
+
+    logEntry(`(${hostname, ip_or_authDNS, type} [${auth_flag}])`)
 
 }
+
+
 
 
 
